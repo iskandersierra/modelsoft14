@@ -1,0 +1,330 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ArgException_Collection" xml:space="preserve">
+    <value>Collection</value>
+  </data>
+  <data name="ArgException_ConditionIsNotMeet" xml:space="preserve">
+    <value>{0} do not meet the condition: {1}.</value>
+    <comment>string variableName, string condition</comment>
+  </data>
+  <data name="ArgException_EnumIsNotValid" xml:space="preserve">
+    <value>{0} has invalid {1} value. Actual value is: {2}.</value>
+    <comment>string variableName;string enumType;string actualValue</comment>
+  </data>
+  <data name="ArgException_KeyNotFound" xml:space="preserve">
+    <value>{0} not found: {1}</value>
+    <comment>string variableName;string key</comment>
+  </data>
+  <data name="ArgException_Max" xml:space="preserve">
+    <value>Maximum</value>
+  </data>
+  <data name="ArgException_Min" xml:space="preserve">
+    <value>Minimum</value>
+  </data>
+  <data name="ArgException_NotAllElementsMatchCondition" xml:space="preserve">
+    <value>{0} do not match condition.</value>
+    <comment>string value</comment>
+  </data>
+  <data name="ArgException_StringIsNotEmpty" xml:space="preserve">
+    <value>{0} must not be empty.</value>
+    <comment>string variableName</comment>
+  </data>
+  <data name="ArgException_StringIsNotWhitespace" xml:space="preserve">
+    <value>{0} must not be blank.</value>
+    <comment>string variableName</comment>
+  </data>
+  <data name="ArgException_SurrogateNotAllowedAsSingleChar" xml:space="preserve">
+    <value>Surrogates not allowed as single char.</value>
+  </data>
+  <data name="ArgException_Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="ArgOutOfRange_MaxMsg" xml:space="preserve">
+    <value>{0} must be lesser than or equal to {2}. Actual value is {1}.</value>
+    <comment>string variableName;string actualValue;string maxValue</comment>
+  </data>
+  <data name="ArgOutOfRange_MinMaxMsg" xml:space="preserve">
+    <value>{0} must be between {2} and {3}. Actual value is {1}.</value>
+    <comment>string variableName;string actualValue;string minValue;string maxValue</comment>
+  </data>
+  <data name="ArgOutOfRange_MinMaxValidMsg" xml:space="preserve">
+    <value>{0} and {1} must be ordered. Actual values are {2} and {3}.</value>
+    <comment>string minVarName;string maxVarName;string minValue;string maxValue</comment>
+  </data>
+  <data name="ArgOutOfRange_MinMsg" xml:space="preserve">
+    <value>{0} must be greater than or equal to {2}. Actual value is {1}.</value>
+    <comment>string variableName;string actualValue;string minValue</comment>
+  </data>
+  <data name="EnumerableExtensions_Periods" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="ExMsg_DecrementOutOfRange" xml:space="preserve">
+    <value>Decrementing {0} is out of range for type {1}</value>
+    <comment>string value; string type</comment>
+  </data>
+  <data name="ExMsg_DefaultInstanceAlreadySetUp" xml:space="preserve">
+    <value>Default instance is already setup.</value>
+  </data>
+  <data name="ExMsg_DirectoryDoNotExist" xml:space="preserve">
+    <value>Directory do not exist: {0}</value>
+    <comment>string path</comment>
+  </data>
+  <data name="ExMsg_DoNotSupportBinarySerialization" xml:space="preserve">
+    <value>{0} do not support binary serialization</value>
+    <comment>string type</comment>
+  </data>
+  <data name="ExMsg_DoNotSupportCompare" xml:space="preserve">
+    <value>{0} do not support value comparison</value>
+    <comment>string type</comment>
+  </data>
+  <data name="ExMsg_DoNotSupportIncrementDecrement" xml:space="preserve">
+    <value>{0} do not support increment/decrement</value>
+    <comment>string type</comment>
+  </data>
+  <data name="ExMsg_DoNotSupportStringSerialization" xml:space="preserve">
+    <value>{0} do not support string serialization</value>
+    <comment>string type</comment>
+  </data>
+  <data name="ExMsg_DuplicatedPropertyInCollection" xml:space="preserve">
+    <value>At least one duplicated {0} in collection {1}: {2}</value>
+    <comment>string propertyName; string collectionName; string identifier</comment>
+  </data>
+  <data name="ExMsg_EnumerableExtensions_EmptyCollection" xml:space="preserve">
+    <value>Empty collection.</value>
+  </data>
+  <data name="ExMsg_EnumerableExtensions_EmptyCollectionNoMinException" xml:space="preserve">
+    <value>Empty collection cannot have a minimum.</value>
+  </data>
+  <data name="ExMsg_EnumerableExtensions_NoMatchingElementException" xml:space="preserve">
+    <value>No matching element found.</value>
+  </data>
+  <data name="ExMsg_EnumTypeCannotHaveTypeAsBaseType" xml:space="preserve">
+    <value>{0} enum type cannot have {1} as base type.</value>
+    <comment>string type, string baseType</comment>
+  </data>
+  <data name="ExMsg_EnumTypeRequiresAtLeastOneLiteral" xml:space="preserve">
+    <value>{0} enum type requires at least one literal.</value>
+    <comment>string type</comment>
+  </data>
+  <data name="ExMsg_IncrementOutOfRange" xml:space="preserve">
+    <value>Incrementing {0} is out of range for type {1}</value>
+    <comment>string value; string type</comment>
+  </data>
+  <data name="ExMsg_InvalidFreezingOperationException" xml:space="preserve">
+    <value>Invalid freezing operation.</value>
+  </data>
+  <data name="ExMsg_InvalidSetUp" xml:space="preserve">
+    <value>Invalid setup</value>
+  </data>
+  <data name="ExMsg_ItemConverterBase_ErrorConvertingSource" xml:space="preserve">
+    <value>Error converting source item.</value>
+  </data>
+  <data name="ExMsg_MissingEnumLiteralValue" xml:space="preserve">
+    <value>Missing enum base value on literal {0}</value>
+    <comment>string literalIdentifier</comment>
+  </data>
+  <data name="ExMsg_Optional_HasNoValueException" xml:space="preserve">
+    <value>Optional value has no value.</value>
+  </data>
+  <data name="ExMsg_PropertyCannotBeEmpty" xml:space="preserve">
+    <value>{0} cannot be empty.</value>
+    <comment>string property</comment>
+  </data>
+  <data name="ExMsg_PropertyCannotBeNull" xml:space="preserve">
+    <value>{0} cannot be null.</value>
+    <comment>string property</comment>
+  </data>
+  <data name="ExMsg_PropertyCannotBeWhitespace" xml:space="preserve">
+    <value>{0} cannot be blank.</value>
+    <comment>string property</comment>
+  </data>
+  <data name="ExMsg_Reference_CanChangeValue" xml:space="preserve">
+    <value>Can't change value.</value>
+  </data>
+  <data name="ExMsg_TrieNode_DuplicatedKeyNotAllowed" xml:space="preserve">
+    <value>Duplicated key not allowed on trie.</value>
+  </data>
+  <data name="ExMsg_WrongEnumLiteralValue" xml:space="preserve">
+    <value>Missing enum base value {0} on literal {1}</value>
+    <comment>string value; string literalIdentifier</comment>
+  </data>
+  <data name="NullString" xml:space="preserve">
+    <value>(null)</value>
+  </data>
+  <data name="Optional_NoHasValueToString" xml:space="preserve">
+    <value>(no value)</value>
+  </data>
+  <data name="ExMsg_DuplicatedObjectsInCollection" xml:space="preserve">
+    <value>At least one duplicated object in collection {0}: {1}</value>
+    <comment>string collectionName; string identifier</comment>
+  </data>
+  <data name="ExMsg_ValueIsNotConformantWithDataType" xml:space="preserve">
+    <value>{0} is not conformant with data type {1}.</value>
+    <comment>object value; string dataTypeName</comment>
+  </data>
+  <data name="ExMsg_BaseClassCycle" xml:space="preserve">
+    <value>{0} forms a cycle with its base classes.</value>
+    <comment>string className</comment>
+  </data>
+  <data name="ExMsg_MetaClassMustBeFrozen" xml:space="preserve">
+    <value>{0} must be frozen in order to be used as the meta class of an object.</value>
+    <comment>string className</comment>
+  </data>
+  <data name="ExMsg_ObjectMustBeFrozen" xml:space="preserve">
+    <value>Object must be frozen to access this feature:{0}</value>
+    <comment>string featureName</comment>
+  </data>
+  <data name="VarOrExprDoNotMeetCondition" xml:space="preserve">
+    <value>Variable or expression does not meet required condition</value>
+  </data>
+  <data name="NotAGenericTypeDefinition" xml:space="preserve">
+    <value>Not a generic type definition: {0}</value>
+  </data>
+  <data name="NotAGenericType" xml:space="preserve">
+    <value>Not a generic type: {0}</value>
+  </data>
+  <data name="NoGenericBaseCandidateFound" xml:space="preserve">
+    <value>No candidate generic base type or interface found</value>
+  </data>
+  <data name="AmbiguousGenericBaseCandidates" xml:space="preserve">
+    <value>Ambiguous generic base type or interface found</value>
+  </data>
+  <data name="InvalidCSharpIdentifier" xml:space="preserve">
+    <value>Invalid identifier: "{0}"</value>
+  </data>
+  <data name="MetaModelActionsLogicTooDeep" xml:space="preserve">
+    <value>Cannot run more than {0} depth of actions.</value>
+  </data>
+  <data name="SerializerForTypeNotFound" xml:space="preserve">
+    <value>Serializer for type {0} not found</value>
+  </data>
+  <data name="TypeDoNotImplementModelDefinition" xml:space="preserve">
+    <value>type {0} do not implement IModelDefinition interface</value>
+  </data>
+  <data name="TypeIsNotAnInterface" xml:space="preserve">
+    <value>type {0} is not an interface</value>
+  </data>
+  <data name="ValueIsNotInstanceOfType" xml:space="preserve">
+    <value>Given value is not an instance of {0}: {1}</value>
+  </data>
+  <data name="EnumMustHaveOneLiteral" xml:space="preserve">
+    <value>Enum {0} must have at least one literal</value>
+  </data>
+</root>

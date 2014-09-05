@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9A54B0B8-4AA8-4DDA-B092-15F3D9CEFD13}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ModelSoft.Modeling</RootNamespace>
+    <AssemblyName>ModelSoft.Modeling</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Definitions\Common\CommonExtensions.cs" />
+    <Compile Include="Definitions\Common\IAComment.cs" />
+    <Compile Include="Definitions\Common\IACommented.cs" />
+    <Compile Include="Definitions\Common\IModel.cs" />
+    <Compile Include="Definitions\Common\IModelElement.cs" />
+    <Compile Include="Definitions\Common\IModelElementCollection.cs" />
+    <Compile Include="Definitions\Common\ImplPOCOS\AComment.cs" />
+    <Compile Include="Definitions\Common\ImplPOCOS\IModelImpl.cs" />
+    <Compile Include="Definitions\Common\ImplPOCOS\ImportedModel.cs" />
+    <Compile Include="Definitions\Common\ImplPOCOS\ModelElementCollection.cs" />
+    <Compile Include="Definitions\Common\ImplPOCOS\ModelElement.cs" />
+    <Compile Include="Definitions\Common\IANamedElement.cs" />
+    <Compile Include="Definitions\Common\IARequiredNamedElement.cs" />
+    <Compile Include="Definitions\Common\IANamespace.cs" />
+    <Compile Include="Definitions\Common\IImportedModel.cs" />
+    <Compile Include="Definitions\Common\IWithNamespace.cs" />
+    <Compile Include="Definitions\Common\ModelElementPropertyValue.cs" />
+    <Compile Include="Definitions\Common\SerializedModelFormat.cs" />
+    <Compile Include="Definitions\Core\Expressions\ICodeSnippet.cs" />
+    <Compile Include="Definitions\Core\Expressions\IExpression.cs" />
+    <Compile Include="Definitions\Core\Expressions\IExpressionSnippet.cs" />
+    <Compile Include="Definitions\Core\Expressions\IStatement.cs" />
+    <Compile Include="Definitions\Core\Expressions\IStatementSnippet.cs" />
+    <Compile Include="Definitions\Core\Expressions\ITypedExpression.cs" />
+    <Compile Include="Definitions\Core\MM0\IComplexType.cs" />
+    <Compile Include="Definitions\Core\MM0\IComplexTypeMember.cs" />
+    <Compile Include="Definitions\Core\MM0\IDataType.cs" />
+    <Compile Include="Definitions\Core\MM0\IEnumLiteral.cs" />
+    <Compile Include="Definitions\Core\MM0\IEnumType.cs" />
+    <Compile Include="Definitions\Core\MM0\IMetaModel.cs" />
+    <Compile Include="Definitions\Core\MM0\IMetaModelDefinition.cs" />
+    <Compile Include="Definitions\Core\MM0\IMM0ModelElement.cs" />
+    <Compile Include="Definitions\Core\MM0\ImplPOCOS\ComplexType.cs" />
+    <Compile Include="Definitions\Core\MM0\ImplPOCOS\ComplexTypeMember.cs" />
+    <Compile Include="Definitions\Core\MM0\ImplPOCOS\DataType.cs" />
+    <Compile Include="Definitions\Core\MM0\ImplPOCOS\EnumLiteral.cs" />
+    <Compile Include="Definitions\Core\MM0\ImplPOCOS\EnumType.cs" />
+    <Compile Include="Definitions\Core\MM0\ImplPOCOS\MetaModel.cs" />
+    <Compile Include="Definitions\Core\MM0\ImplPOCOS\MetaModelDefinition.cs" />
+    <Compile Include="Definitions\Core\MM0\ImplPOCOS\MM0ModelElement.cs" />
+    <Compile Include="Definitions\Core\MM0\ImplPOCOS\PrimitiveType.cs" />
+    <Compile Include="Definitions\Core\MM0\ImplPOCOS\Property.cs" />
+    <Compile Include="Definitions\Core\MM0\IPrimitiveType.cs" />
+    <Compile Include="Definitions\Core\MM0\IProperty.cs" />
+    <Compile Include="Definitions\Core\MM0\Multiplicity.cs" />
+    <Compile Include="Definitions\Core\MM0\RelationshipType.cs" />
+    <Compile Include="IModelDeserializer.cs" />
+    <Compile Include="ImportExtension.cs" />
+    <Compile Include="IsComputedAttribute.cs" />
+    <Compile Include="IsHiddenPropertyAttribute.cs" />
+    <Compile Include="ModelDeserializerBase.cs" />
+    <Compile Include="ModelLoader.cs" />
+    <Compile Include="ModelLoaderContext.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReferenceExtension.cs" />
+    <Compile Include="RelationshipTypeAttribute.cs" />
+    <Compile Include="WebStreamModelDeserializerBase.cs" />
+    <Compile Include="XamlModelDeserializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Definitions\Common\Common Diagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ModelSoft.Framework\ModelSoft.Framework.csproj">
+      <Project>{bb78ccca-1a77-48d2-ba93-35e0414fa450}</Project>
+      <Name>ModelSoft.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Definitions\Core\Expressions\ImplPocos\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <!-- Folder containing Antlr4BuildTasks.dll -->
+    <Antlr4BuildTaskPath>$(ProjectDir)Reference\Antlr4</Antlr4BuildTaskPath>
+    <!-- Path to the ANTLR Tool itself. -->
+    <Antlr4ToolPath>$(ProjectDir)Reference\Antlr4\antlr4-csharp-4.0.1-SNAPSHOT-complete.jar</Antlr4ToolPath>
+  </PropertyGroup>
+  <Import Project="$(ProjectDir)Reference\Antlr4\Antlr4.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

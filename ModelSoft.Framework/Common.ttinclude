@@ -1,0 +1,26 @@
+﻿<#@ IntelliSenseLanguage processor="tangibleT4Editor" language="C#" #>
+<#+
+public static string ToStringList<T>(IEnumerable<T> e, string separator = null, Func<T, string> toStringFunc = null, string etcetera = "...", int maxElementCount = -1, string opening = "", string closing = "", string empty = "")
+{
+  if (separator == null)
+    separator = System.Threading.Thread.CurrentThread.CurrentUICulture.TextInfo.ListSeparator + " ";
+  if (toStringFunc == null) 
+    toStringFunc = t => "" + t;
+
+  if (maxElementCount < 0) maxElementCount = int.MaxValue;
+  var sb = new System.Text.StringBuilder();
+  if (e != null)
+    foreach (var t in e)
+    {
+      if (sb.Length > 0) sb.Append(separator);
+      if (maxElementCount-- <= 0)
+      {
+        sb.Append(etcetera);
+        break;
+      }
+      sb.Append(toStringFunc(t));
+    }
+  if (sb.Length == 0 && empty != null)
+    return empty;
+  return opening + sb + closing;
+}#>

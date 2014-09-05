@@ -1,0 +1,171 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#@ include file="Common.ttinclude" #>
+namespace <#= Namespace #>
+{
+	using global::System;
+	using global::System.ComponentModel;
+	using global::System.Collections.Generic;
+  
+  public enum StopsWith { Shorter, Longer, First, Never }
+  
+  public static class <#= TupleName #>
+  {
+  
+<#for(int tupleSize = minTupleSize; tupleSize <= maxTupleSize; tupleSize++) {#>
+<#
+string types = GetTypesString(tupleSize);
+string enumTypes = GetEnumerableTypesString(tupleSize);
+string arguments = GetArgumentsString(tupleSize);
+string funcArguments = GetFuncArgumentsString(tupleSize, "T");
+string enumArguments = GetEnumerableArgumentsString(tupleSize);
+#>
+    /// <summary>
+    /// Creates an immutable <#=tupleSize#>-Tuple.
+    /// </summary>
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+    /// <typeparam name="T<#=i#>">The type of the <#=i#>th element.</typeparam>
+<#}#>
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+    /// <param name="item<#=i#>">The <#=i#>th element.</param>
+<#}#>
+    /// <returns>A new immutable <#=tupleSize#>-Tuple.</returns>
+    public static <#= TupleName #><<#=types#>> Create<<#=types#>>(<#=arguments#>)
+    {
+        return new <#= TupleName #><<#=types#>>(<#=GetVariablesString(tupleSize)#>);
+    }
+
+    public static <#= TupleName #><<#=types#>> CreateTuple<T, <#=types#>>(this T obj, <#=funcArguments#>)
+    {
+      return Create(<#=GetFuncCalls(tupleSize, "obj")#>);
+    }
+    
+    public static IEnumerable<<#= TupleName #><<#=types#>>> Enumerate<<#=types#>>(this <#= TupleName #><<#=enumTypes#>> enumerables)
+    {
+      return Enumerate(enumerables, true);
+    }
+
+    public static IEnumerable<<#= TupleName #><<#=types#>>> Enumerate<<#=types#>>(this <#= TupleName #><<#=enumTypes#>> enumerables, bool stopWithShorter)
+    {
+      return Enumerate(<#=GetEnumPropertiesString(tupleSize)#>, stopWithShorter);
+    }
+
+    public static IEnumerable<<#= TupleName #><<#=types#>>> Enumerate<<#=types#>>(this <#=enumArguments#>)
+    {
+      return Enumerate(<#=GetVariablesString(tupleSize)#>, false);
+    }
+
+    public static IEnumerable<<#= TupleName #><<#=types#>>> Enumerate<<#=types#>>(this <#=enumArguments#>, bool stopWithShorter)
+    {
+      return Enumerate(<#=GetVariablesString(tupleSize)#>, stopWithShorter ? StopsWith.Shorter : StopsWith.Longer);
+    }
+
+    public static IEnumerable<<#= TupleName #><<#=types#>>> Enumerate<<#=types#>>(this <#=enumArguments#>, StopsWith stopsWith)
+    {
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+      var item<#=i#>Enum = item<#=i#>.GetEnumerator();
+      var item<#=i#>Finished = false;
+<#}#>
+
+      while (true)
+      {
+        int finishedCounter = <#=tupleSize#>;
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+
+        if (!item<#=i#>Finished && !item<#=i#>Enum.MoveNext())
+          item<#=i#>Finished = true;
+        if (item<#=i#>Finished) finishedCounter--;
+<#}#>
+
+        switch (stopsWith)
+        {
+          case StopsWith.Shorter:
+            if (finishedCounter < <#=tupleSize#>)
+              yield break;
+            break;
+          case StopsWith.Longer:
+            if (finishedCounter == 0)
+              yield break;
+            break;
+          case StopsWith.First:
+            if (item<#=1#>Finished)
+              yield break;
+            break;
+        }
+
+        //if (stopWithShorter && finishedCounter < <#=tupleSize#> || !stopWithShorter && finishedCounter == 0)
+        //  yield break;
+        var tuple = <#= TupleName #>.Create(
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+          item<#=i#>Finished ? default(T<#=i#>) : item<#=i#>Enum.Current<# if(i < tupleSize) {#>, 
+<#}#>
+<#}#> );
+        yield return tuple;
+      }
+    }
+    
+<#}#>
+  }
+}
+
+<#@ import namespace = "System.Collections.Generic" #>
+<#@ import namespace = "System.Text" #>
+<#+
+const string TupleName = "Tup";
+const int minTupleSize = 1; 
+const int maxTupleSize = 10; // should be <= 13 or you must add more ordinal names
+const string Namespace = "ModelSoft.Framework";
+const string Indent = "  ";
+private string GetQualifiedVarNames(int tupleSize, string qualifier)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("{0}.{1}", qualifier, i));
+}
+private string GetQualifiedSystemVarNames(int tupleSize, string qualifier)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("{0}.Item{1}", qualifier, i));
+}
+private string GetTypesString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("T{0}", i));
+}
+private string GetArgumentsString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("T{0} item{0}", i));
+}
+private string GetVariablesString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("item{0}", i));
+}
+private string GetPropertiesString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("Item{0}", i));
+}
+private string GetEnumerableTypesString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("IEnumerable<T{0}>", i));
+}
+private string GetFuncArgumentsString(int tupleSize, string qualifier)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("Func<{1}, T{0}> func{0}", i, qualifier));
+}
+private string GetFuncCalls(int tupleSize, string qualifier)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("func{0}({1})", i, qualifier));
+}
+private string GetEnumPropertiesString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("enumerables.Item{0}", i));
+}
+private string GetEnumerableArgumentsString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("IEnumerable<T{0}> item{0}", i));
+}
+#>

@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BB78CCCA-1A77-48D2-BA93-35E0414FA450}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ModelSoft.Framework</RootNamespace>
+    <AssemblyName>ModelSoft.Framework</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Action.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Action.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BinaryConvert.cs" />
+    <Compile Include="Collections\AVLNode.cs" />
+    <Compile Include="Collections\AVLTree.cs" />
+    <Compile Include="Collections\CancelableItemPositionEventArgs.cs" />
+    <Compile Include="Collections\CancelableItemsEventArgs.cs" />
+    <Compile Include="Collections\CancelableSubstituteItemPositionEventArgs.cs" />
+    <Compile Include="Collections\ComparisonComparer.cs" />
+    <Compile Include="Collections\CustomList.cs" />
+    <Compile Include="Collections\CustomListEvents.cs" />
+    <Compile Include="Collections\DuplicateKeyNotAllowedException.cs" />
+    <Compile Include="Collections\EqualityComparerDownCaster.cs" />
+    <Compile Include="Collections\IIndexedList.cs" />
+    <Compile Include="Collections\IItemDispatcher.cs" />
+    <Compile Include="Collections\InverseComparer.cs" />
+    <Compile Include="Collections\IPersistentStructure.cs" />
+    <Compile Include="Collections\IPriorityDispatcher.cs" />
+    <Compile Include="Collections\ItemPositionEventArgs.cs" />
+    <Compile Include="Collections\ItemsEventArgs.cs" />
+    <Compile Include="Collections\ITrie.cs" />
+    <Compile Include="Collections\IValueMap.cs" />
+    <Compile Include="Collections\ReadOnlyDictionary.cs" />
+    <Compile Include="Collections\ReadOnlyList.cs" />
+    <Compile Include="Collections\ReadOnlySet.cs" />
+    <Compile Include="Collections\SubstituteItemPositionEventArgs.cs" />
+    <Compile Include="Collections\Trie.cs" />
+    <Compile Include="Collections\TrieNode.cs" />
+    <Compile Include="CommonTypes.cs" />
+    <Compile Include="DataStructures\Collections\ArrayRangeWrapper.cs" />
+    <Compile Include="DataStructures\Collections\CollectionBase.cs" />
+    <Compile Include="DataStructures\Collections\CollectionsExtensions.cs" />
+    <Compile Include="DataStructures\Collections\DictionaryBase.cs" />
+    <Compile Include="DataStructures\Collections\ListBase.cs" />
+    <Compile Include="DataStructures\Collections\ListRangeWrapper.cs" />
+    <Compile Include="DataStructures\Collections\OrderedDictionary.cs" />
+    <Compile Include="DataStructures\Collections\OrderedSet.cs" />
+    <Compile Include="DataStructures\Collections\ReadOnlyCollectionBase.cs" />
+    <Compile Include="DataStructures\Collections\ReadOnlyCollectionWrapper.cs" />
+    <Compile Include="DataStructures\Collections\ReadOnlyDictionaryBase.cs" />
+    <Compile Include="DataStructures\Collections\ReadOnlyDictionaryWrapper.cs" />
+    <Compile Include="DataStructures\Collections\ReadOnlyListBase.cs" />
+    <Compile Include="DataStructures\Collections\ReadOnlyListWrapper.cs" />
+    <Compile Include="DataStructures\Collections\RedBlackTree.cs" />
+    <Compile Include="DataStructures\Trees\IntervalTree\Interval.cs" />
+    <Compile Include="DataStructures\Trees\IntervalTree\IntervalNode.cs" />
+    <Compile Include="DelegateItemConverter.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="EnumExtensions.cs" />
+    <Compile Include="FormattedResources.cs" />
+    <Compile Include="Func.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Func.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GeneralExtensions.cs" />
+    <Compile Include="GenericMonitor.cs" />
+    <Compile Include="ImplementsInterfaceAttribute.cs" />
+    <Compile Include="LocalizationAttributes.cs" />
+    <Compile Include="Logging\ILogChannel.cs" />
+    <Compile Include="Logging\ILogChannelProvider.cs" />
+    <Compile Include="Logging\LogChannelExtensions.cs" />
+    <Compile Include="Logging\LogChannelProviderBase.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Logging\LogManager.cs" />
+    <Compile Include="Logging\NullLogChannelProvider.cs" />
+    <Compile Include="Serialization\MSCoreLibStringSerializer.cs" />
+    <Compile Include="Serialization\SerializationExtensions.cs" />
+    <Compile Include="ServiceHost.cs" />
+    <Compile Include="IItemConverter.cs" />
+    <Compile Include="IoC\Inject.cs" />
+    <Compile Include="IoC\InjectConstructorInfo.cs" />
+    <Compile Include="IoC\InjectMethodInfo.cs" />
+    <Compile Include="IoC\InjectMemberInfo.cs" />
+    <Compile Include="IoC\InjectParameterValueAttribute.cs" />
+    <Compile Include="IoC\InjectParameterValueBase.cs" />
+    <Compile Include="IoC\InjectProperty.cs" />
+    <Compile Include="IoC\DependencyAttribute.cs" />
+    <Compile Include="IoC\IoCExtensions.cs" />
+    <Compile Include="IoC\RunServiceRegisterAttribute.cs" />
+    <Compile Include="IoC\ServiceComposerExtensions.cs" />
+    <Compile Include="IoC\ServiceRegisterBase.cs" />
+    <Compile Include="IWithDebugString.cs" />
+    <Compile Include="ObjectEqualityComparer.cs" />
+    <Compile Include="ObjectManagement\CollectionSorting.cs" />
+    <Compile Include="ObjectManagement\CustomClassDescription.cs" />
+    <Compile Include="ObjectManagement\CustomCLRPrimitiveTypeDescription.cs" />
+    <Compile Include="ObjectManagement\CustomDataTypeDescription.cs" />
+    <Compile Include="ObjectManagement\CustomEnumLiteralDescription.cs" />
+    <Compile Include="ObjectManagement\CustomEnumTypeDescription.cs" />
+    <Compile Include="ObjectManagement\CustomOwnedDescriptionCollection.cs" />
+    <Compile Include="ObjectManagement\CustomIdentifiedDescription.cs" />
+    <Compile Include="ObjectManagement\CustomNamedDescription.cs" />
+    <Compile Include="ObjectManagement\CustomOwnedNamedDescriptionCollection.cs" />
+    <Compile Include="ObjectManagement\CustomPrimitiveTypeDescription.cs" />
+    <Compile Include="ObjectManagement\CustomReferencedDescriptionCollection.cs" />
+    <Compile Include="ObjectManagement\CustomReferencedNamedDescriptionCollection.cs" />
+    <Compile Include="ObjectManagement\FieldManager.cs" />
+    <Compile Include="FreezableBase.cs" />
+    <Compile Include="FreezableExtensions.cs" />
+    <Compile Include="ObjectManagement\IClassDescription.cs" />
+    <Compile Include="ObjectManagement\IClassDescriptionCollection.cs" />
+    <Compile Include="ObjectManagement\IDataTypeDescription.cs" />
+    <Compile Include="ObjectManagement\IDelegatedValue.cs" />
+    <Compile Include="ObjectManagement\IDescriptionCollection.cs" />
+    <Compile Include="ObjectManagement\IDescriptionWithParent.cs" />
+    <Compile Include="ObjectManagement\IEnumLiteralDescription.cs" />
+    <Compile Include="ObjectManagement\IEnumLiteralDescriptionCollection.cs" />
+    <Compile Include="ObjectManagement\IEnumTypeDescription.cs" />
+    <Compile Include="IFreezable.cs" />
+    <Compile Include="ObjectManagement\IIdentifiedDescription.cs" />
+    <Compile Include="ObjectManagement\IMetaDescription.cs" />
+    <Compile Include="ObjectManagement\INamedDescription.cs" />
+    <Compile Include="ObjectManagement\INamedDescriptionCollection.cs" />
+    <Compile Include="InvalidFreezingOperationException.cs" />
+    <Compile Include="ObjectManagement\IObjectManagerCollection.cs" />
+    <Compile Include="ObjectManagement\IObjectManagerContainer.cs" />
+    <Compile Include="ObjectManagement\IObjectManagerHost.cs" />
+    <Compile Include="ObjectManagement\IPrimitiveTypeDescription.cs" />
+    <Compile Include="ObjectManagement\IPropertyDescription.cs" />
+    <Compile Include="ObjectManagement\IPropertyDescriptionCollection.cs" />
+    <Compile Include="ObjectManagement\KeywordAccessAttribute.cs" />
+    <Compile Include="ObjectManagement\ObjectManagementExtensions.cs" />
+    <Compile Include="ObjectManagement\ObjectManager.cs" />
+    <Compile Include="ObjectManagement\CustomPropertyDescription.cs" />
+    <Compile Include="ObjectManagement\PropertyKind.cs" />
+    <Compile Include="ObjectManagement\PropertyMultiplicity.cs" />
+    <Compile Include="ObjectModel\ClassDescriptionExtensions.cs" />
+    <Compile Include="ObjectModel\ClassDescriptionSetup.cs" />
+    <Compile Include="ObjectModel\FriendlyNameAttribute.cs" />
+    <Compile Include="ObjectModel\IClassDescription.cs" />
+    <Compile Include="ObjectModel\IClassDescriptionRegistry.cs" />
+    <Compile Include="ObjectModel\IFieldData.cs" />
+    <Compile Include="ObjectModel\INetTypeClassDescriptionRegistry.cs" />
+    <Compile Include="ObjectModel\IObjectData.cs" />
+    <Compile Include="ObjectModel\IObjectDataHost.cs" />
+    <Compile Include="ObjectModel\IPropertyDescription.cs" />
+    <Compile Include="ObjectModel\NetTypeClassDescriptionRegistry.cs" />
+    <Compile Include="ObjectModel\PrincipalResourcesName.cs" />
+    <Compile Include="ObjectModel\PropertyDescription.cs" />
+    <Compile Include="ObjectModel\PropertyDescriptionChangeValueContext.cs" />
+    <Compile Include="ObjectModel\PropertyDescriptionChangingValueContext.cs" />
+    <Compile Include="ObjectModel\PropertyDescriptionCoerceContext.cs" />
+    <Compile Include="ObjectModel\PropertyDescriptionComputeContext.cs" />
+    <Compile Include="ObjectModel\PropertyDescriptionContext.cs" />
+    <Compile Include="ObjectModel\PropertyDescriptionLocation.cs" />
+    <Compile Include="ObjectModel\PropertyDescriptionSetup.cs" />
+    <Compile Include="ObjectModel\PropertyDescriptionValueChangeContext.cs" />
+    <Compile Include="ObjectModel\PropertyDescriptionValues.cs" />
+    <Compile Include="ObjectModel\PropertyInfoDescription.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Reflection\AllAssemblies.cs" />
+    <Compile Include="IoC\IServiceComposer.cs" />
+    <Compile Include="IoC\IServiceManager.cs" />
+    <Compile Include="IoC\IServiceRegister.cs" />
+    <Compile Include="IoC\ServiceComposer.cs" />
+    <Compile Include="IoC\ServiceLifeTime.cs" />
+    <Compile Include="IoC\ServiceManager.cs" />
+    <Compile Include="IO\FileExtensions.cs" />
+    <Compile Include="IO\StreamExtensions.cs" />
+    <Compile Include="KeyValuePair.cs" />
+    <Compile Include="NotifyPropertyChanged.cs" />
+    <Compile Include="NotifyPropertyChangedChanging.cs" />
+    <Compile Include="Optional.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Reflection\AllClasses.cs" />
+    <Compile Include="Reflection\AssemblyExtensions.cs" />
+    <Compile Include="Reflection\AssemblyExtensionsGetAssemblyInfo.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AssemblyExtensionsGetAssemblyInfo.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Reflection\ExpressionPrinter.cs" />
+    <Compile Include="Reflection\TypeExtensions.cs" />
+    <Compile Include="Require.cs" />
+    <Compile Include="Seq.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Seq.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Serialization\AttributedClrTypeStringSerializerFactory.cs" />
+    <Compile Include="Serialization\ClrTypeStringSerializerAttribute.cs" />
+    <Compile Include="Serialization\ClrTypeStringSerializerBase.cs" />
+    <Compile Include="Serialization\ClrTypeStringSerializerFactoryBase.cs" />
+    <Compile Include="Serialization\IClrTypeStringSerializer.cs" />
+    <Compile Include="Serialization\IClrTypeStringSerializerFactory.cs" />
+    <Compile Include="Serialization\IXmlWrittable.cs" />
+    <Compile Include="Collections\SimpleConcurrentCache.cs" />
+    <Compile Include="ISimpleCache.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\IBinarySerializer.cs" />
+    <Compile Include="Serialization\IStringSerializer.cs" />
+    <Compile Include="Serialization\SimpleBinarySerializer.cs" />
+    <Compile Include="Serialization\StringSerializerToClrTypeStringSerializerAdapterFactory.cs" />
+    <Compile Include="Serialization\XmlConvertStringSerializer.cs" />
+    <Compile Include="StaticDefaultInstanceBase.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="StringFormatter.cs" />
+    <Compile Include="StringSpliterConverter.cs" />
+    <Compile Include="TemporaryFile.cs" />
+    <Compile Include="Tup.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tup.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TupCreate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TupCreate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UriExtensions.cs" />
+    <Compile Include="XML\SimpleValueSerializerContext.cs" />
+    <Compile Include="XML\XLinqExtensions.cs" />
+    <Compile Include="XML\XmlMap.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Action.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Action.cs</LastGenOutput>
+    </None>
+    <None Include="Common.ttinclude" />
+    <None Include="FormattedResources.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastOutputs>.\FormattedResources.cs</LastOutputs>
+      <LastGenOutput>FormattedResources.txt</LastGenOutput>
+    </None>
+    <None Include="Func.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Func.cs</LastGenOutput>
+    </None>
+    <None Include="Reflection\AssemblyExtensionsGetAssemblyInfo.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AssemblyExtensionsGetAssemblyInfo.cs</LastGenOutput>
+    </None>
+    <None Include="Seq.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Seq.cs</LastGenOutput>
+    </None>
+    <None Include="Tup.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Tup.cs</LastGenOutput>
+    </None>
+    <None Include="TupCreate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TupCreate.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FormattedResources.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FormattedResources.tt</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Algorithms\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

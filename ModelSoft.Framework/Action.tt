@@ -1,0 +1,55 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#@ include file="Common.ttinclude" #>
+namespace <#= Namespace #>
+{
+	using global::System;
+
+<#for(int tupleSize = minTupleSize; tupleSize <= maxTupleSize; tupleSize++) {#>
+<#
+string types = GetTypesString(tupleSize);
+string arguments = GetArgumentsString(tupleSize);
+#>
+  /// <summary>
+  /// Encapsulates a method that has <#= tupleSize #> parameters and returns void.
+  /// </summary>
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+  /// <typeparam name="T<#=i#>">The type of the <#= i #>th parameter of the method that this delegate encapsulates.</typeparam>
+<#}#>
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+  /// <param name="item<#= i #>">The <#= i #>th parameter of the method that this delegate encapsulates.</param>
+<#}#>
+  public delegate void <#= ActionName #><<#=types#>>(<#=arguments#>);
+<#}#>
+}
+
+<#+
+const string Namespace = "ModelSoft.Framework";
+const string ActionName = "Action";
+const int minTupleSize = 9; 
+const int maxTupleSize = 20; 
+private string GetTypesString(int tupleSize)
+{
+  return ToStringList(System.Linq.Enumerable.Range(1, tupleSize), ", ", i => string.Format("in T{0}", i));
+}
+private string GetArgumentsString(int tupleSize)
+{
+  return ToStringList(System.Linq.Enumerable.Range(1, tupleSize), ", ", i => string.Format("T{0} item{0}", i));
+}
+private string GetVariablesString(int tupleSize)
+{
+  return ToStringList(System.Linq.Enumerable.Range(1, tupleSize), ", ", i => string.Format("item{0}", i));
+}
+private string GetPropertiesString(int tupleSize)
+{
+  return ToStringList(System.Linq.Enumerable.Range(1, tupleSize), ", ", i => string.Format("Item{0}", i));
+}
+#>

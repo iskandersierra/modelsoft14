@@ -1,0 +1,47 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="System.Windows.Forms" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#
+   string[] Levels = new[] { 
+        "Warn",
+        "Info",
+        "Debug",
+        "Trace",
+    };
+#>
+using System;
+using ModelSoft.Framework.Annotations;
+
+namespace ModelSoft.Framework.Logging
+{
+<# foreach (var level in Levels) { #>
+
+    [Serializable]
+    public class Log<#= level #>Attribute : LogAttribute
+    {
+        public Log<#= level #>Attribute([NotNull] string channelName, LoggingType loggingType = LoggingType.EnterAndExit) 
+            : base(channelName, loggingType, LogLevel.<#= level #>, LogLevel.Error)
+        {
+        }
+
+        public Log<#= level #>Attribute(LoggingType loggingType = LoggingType.EnterAndExit, LogLevel level = LogLevel.Info, LogLevel errorLevel = LogLevel.Error)
+            : base(loggingType, LogLevel.<#= level #>, LogLevel.Error)
+        {
+        }
+
+        public Log<#= level #>Attribute(ChannelNameType channelType, LoggingType loggingType = LoggingType.EnterAndExit, LogLevel level = LogLevel.Info, LogLevel errorLevel = LogLevel.Error)
+            : base(channelType, loggingType, LogLevel.<#= level #>, LogLevel.Error)
+        {
+        }
+    }
+<# } #>
+
+}
+ 

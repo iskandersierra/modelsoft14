@@ -1,0 +1,262 @@
+﻿namespace <#= Namespace #>
+{
+  using global::System.ComponentModel;
+  using global::System.Collections.Generic;
+  using global::System;
+
+  /// <summary>
+  /// Contains methods for generating sequences (IEnumerables)
+  /// </summary>
+  [Browsable(false)]
+  [EditorBrowsable(EditorBrowsableState.Never)]
+  public static partial class <#= SeqName #>
+  {
+<#WriteBuilds(2, 4);#>
+#region [ From source and funcs ]
+<#for(int seqSize = minSeqSize; seqSize <= maxSeqSize; seqSize++) {#>
+<#
+string funcArguments = GetFuncArgumentsString(seqSize, "TSource", "T");
+#>
+    public static IEnumerable<T> BuildSeq<TSource, T>(this TSource obj, <#=funcArguments#>)
+    {
+<#for(int i = 1; i <= seqSize; i++ ){#>
+      yield return <#=GetOrdinalName(i)#>(obj);
+<#}#>
+    }
+<# } #>
+    #endregion [ From source and funcs ]
+  }
+}
+
+<#@ import namespace = "System.Collections.Generic" #>
+<#@ import namespace = "System.Text" #>
+<#+
+const int minSeqSize = 1; 
+const int maxSeqSize = 10;
+const string SeqName = "Seq";
+const string Namespace = "ModelSoft.Framework";
+const string Indent = "  ";
+const string enumerableName = "enumerable";
+const string valueName = "value";
+
+private void WriteBuilds(int numberOfEnumerables, int numberOfValues)
+{
+  this.indent = new StringBuilder(Indent + Indent);
+  this.buffer = new StringBuilder(Indent + Indent);
+  WriteBuild(0, new int[1]);
+  WriteLineBuffer("");
+        
+  for(int i = 1; i < numberOfEnumerables + 1; ++i)
+  {
+    WriteLineBuffer(string.Format("#region [ With {0} enumerable(s) ]", i));
+    foreach(List<int> valueCounts in Generate(i+1, numberOfValues))
+    {
+      this.indent = new StringBuilder(Indent + Indent);
+        
+      WriteBuild(i, valueCounts);
+      WriteLineBuffer("");
+    }
+    WriteLineBuffer(string.Format("#endregion [ With {0} enumerable(s) ]", i));
+  }
+        
+  WriteLineBuffer("#region [ Only enumerables ]");
+  for(int i = numberOfEnumerables + 1; i < 11; ++i)
+  {
+    this.indent = new StringBuilder(Indent + Indent);
+            
+    WriteBuild(i, new int[i+1]);
+    WriteLineBuffer("");
+  }
+  WriteLineBuffer("#endregion [ Only enumerables ]");
+        
+  Write(this.buffer.ToString());
+}
+    
+private string WriteBuild(int numberOfParameters, IList<int> valueCounts)
+{
+  WriteLineBuffer("/// <summary>");
+  WriteLineBuffer("/// Generates a sequence from a set of values or enumerations.");
+  WriteLineBuffer("/// </summary>");
+  buffer.Append("public static IEnumerable<T> Build<T>(");
+        
+  foreach(string parameter in GetParameters(numberOfParameters, valueCounts))
+  {
+    buffer.Append(parameter);
+    buffer.Append(", ");
+  }
+        
+  WriteLineBuffer("params T[] args)");
+        
+  WriteLineBufferIndent("{");
+                
+  WriteBuildBody(numberOfParameters, valueCounts);
+                
+  WriteLineBuffer("}");
+        
+  return buffer.ToString();
+}
+    
+private void WriteBuildBody(int numberOfParameters, IList<int> valueCounts)
+{
+  for(int i = 0; i < valueCounts[0]; ++i)
+  {
+    WriteYieldElement(0, i);
+    WriteLineBuffer("");
+  }
+    
+  for(int i=0; i < numberOfParameters; ++i)
+  {
+    WriteForeachForEnumerable(i);
+            
+    WriteLineBuffer("");
+            
+    for(int j=0; j < valueCounts[i+1]; ++j)
+    {
+      WriteYieldElement(i+1, j);
+                
+      WriteLineBuffer("");
+    }
+  }
+        
+  WriteLineBuffer("foreach(var item in args)");
+  WriteLineBufferIndent("{");
+  WriteLineBufferDeindent("yield return item;");
+  WriteLineBufferDeindent("}");
+}
+    
+StringBuilder buffer = new StringBuilder();
+StringBuilder indent = new StringBuilder();
+    
+private void WriteYieldElement(int first, int second)
+{
+  WriteLineBuffer("yield return " + valueName + first + second + ";");
+}
+    
+private void WriteForeachForEnumerable(int enumerableNumber)
+{
+  WriteLineBuffer("if(" + enumerableName + enumerableNumber + " != null)");
+  WriteLineBuffer("foreach( var value in "  + enumerableName + enumerableNumber + ")");
+  WriteLineBufferIndent("{");
+  WriteLineBufferDeindent("yield return value;");
+  WriteLineBuffer("}");
+}
+    
+private void WriteLineBuffer(string value)
+{
+  buffer.Append(value);
+  buffer.Append("\r\n");
+  buffer.Append(indent.ToString());
+}
+    
+private void WriteLineBufferDeindent(string value)
+{
+  buffer.Append(value);
+  buffer.Append("\r\n");
+  indent.Remove(indent.Length - (Indent.Length + 1), Indent.Length);
+  buffer.Append(indent);
+}
+    
+private void WriteLineBufferIndent(string value)
+{
+  buffer.Append(value);
+  buffer.Append("\r\n");
+  indent.Append(Indent);
+  buffer.Append(indent);
+}
+    
+private IEnumerable<string> GetParameters(int numberOfEnumerables, IList<int> parameterCount)
+{
+  for(int j = 0; j < parameterCount[0]; ++j)
+  {
+    yield return "T " + valueName + 0 + j;
+  }
+        
+  for(int i = 0; i < numberOfEnumerables; ++i)
+  {
+    yield return "IEnumerable<T> " + enumerableName + i;
+                
+    for(int j = 0; j < parameterCount[i + 1]; ++j)
+    {
+      yield return "T " + valueName + (i + 1) + j;
+    }
+  }
+}
+    
+public IEnumerable<List<int>> Generate(int numberOfElements, int maxValue)
+{
+  return Generate(numberOfElements, maxValue, 0);
+}
+
+public IEnumerable<List<int>> Generate(int numberOfElements, int maxValue, int minValue)
+{
+  List<int> digits = new List<int>();
+  for (int i = 0; i < numberOfElements; ++i)
+    digits.Add(0);
+
+  while (NotAllDigitsMaxValue(digits, maxValue))
+  {
+    if (AllDigitsGreaterThanMinValue(digits, minValue))
+      yield return new List<int>(digits);
+                
+    AddOneToDigit(digits, 0, maxValue);
+  }
+        
+  yield return new List<int>(digits);
+}
+
+private bool NotAllDigitsMaxValue(List<System.Int32> digits, int maxValue)
+{
+  foreach(int digit in digits)
+  {
+    if(digit < maxValue)
+    {
+      return true;
+    }
+  }
+        
+  return false;
+}
+    
+private bool AllDigitsGreaterThanMinValue(List<System.Int32> digits, int minValue)
+{
+  foreach(int digit in digits)
+  {
+    if(digit < minValue)
+    {
+      return false;
+    }
+  }
+        
+  return true;
+}
+    
+private void AddOneToDigit(List<System.Int32> digits, int position, int maxValue)
+{
+  if (position >= digits.Count)
+    throw new ArgumentException("position cannot be greater than count");
+
+  digits[position]++;
+
+  if (digits[position] <= maxValue)
+    return;
+
+  digits[position] = 0;
+  AddOneToDigit(digits, position + 1, maxValue);
+}
+
+private string GetOrdinalName(int ordinal)
+{
+  return "item" + ordinal;
+}
+private string GetFuncArgumentsString(int seqSize, string type1, string type2)
+{
+  StringBuilder sb = new StringBuilder();
+  for(int i = 1; i <= seqSize; i++)
+  {
+    if (sb.Length > 0) sb.Append(", ");
+    sb.AppendFormat("Func<{0}, {1}> {2}", type1, type2, GetOrdinalName(i));
+  }
+  return sb.ToString();
+}
+
+#>

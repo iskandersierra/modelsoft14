@@ -1,0 +1,55 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core" #>
+<#@ Assembly Name="System.Windows.Forms" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #>
+<# 
+  string snull = null;
+  var infoNames = new []
+  {
+    new { Name = "Company", Property = snull },
+    new { Name = "Copyright", Property = snull },
+    new { Name = "Culture", Property = snull },
+    new { Name = "DefaultAlias", Property = snull },
+    new { Name = "Description", Property = snull },
+    new { Name = "FileVersion", Property = "Version" },
+    new { Name = "Product", Property = snull },
+    new { Name = "Title", Property = snull },
+    new { Name = "Trademark", Property = snull },
+    new { Name = "Version", Property = snull },
+  };
+#>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Reflection;
+using System.IO;
+
+namespace ModelSoft.Framework.Reflection
+{
+  public static partial class AssemblyExtensions
+  {
+<# foreach (var info in infoNames)
+     {
+       string name = info.Name;
+       string propertyName = info.Property ?? name;
+       string attrName = string.Format("Assembly{0}Attribute", name);
+       string type = "string";
+#>
+    public static <#= type #> Get<#= name #>(this Assembly assembly)
+    {
+      assembly.RequireNotNull("assembly");
+      var attr = assembly.GetCustomAttribute<<#= attrName #>>();
+      if (attr != null)
+        return attr.<#= propertyName #>;
+      return default(<#= type #>);
+    }
+<# } #>
+  }
+}

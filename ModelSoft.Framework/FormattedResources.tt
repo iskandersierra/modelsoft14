@@ -1,0 +1,2 @@
+﻿<#@ template language="C#" debug="true" hostSpecific="true" #>
+<#@ include file="$(SolutionDir)\T4Templates\Common\FormattedResources.ttinclude" #>

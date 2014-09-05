@@ -1,0 +1,4 @@
+﻿ 
+Namespace = ModelSoft.Framework
+// Generating FormattedResources on C:\Iskander\Work\ModelSoftVS2012\ModelSoft.Framework\Properties\Resources.resx
+

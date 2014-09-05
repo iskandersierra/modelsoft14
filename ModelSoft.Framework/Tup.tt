@@ -1,0 +1,235 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ Assembly Name="System.Core.dll" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections" #>
+<#@ import namespace="System.Collections.Generic" #> 
+<#@ include file="Common.ttinclude" #>
+namespace <#= Namespace #>
+{
+  using global::System;
+  using global::System.ComponentModel;
+  using global::System.Collections.Generic;
+  using global::System.Collections;
+
+<#for(int tupleSize = minTupleSize; tupleSize <= maxTupleSize; tupleSize++) {#>
+<#
+string types = GetTypesString(tupleSize);
+string arguments = GetArgumentsString(tupleSize);
+#>
+  /// <summary>
+  /// An immutable <#=tupleSize#>-tuple class.
+  /// </summary>
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+  /// <typeparam name="T<#=i#>">The type of the <#= i #>th element.</typeparam>
+<#}#>
+  /// <remarks>
+  /// This class will be deprecated when VS2010 is released. At 
+  /// that time, System.Tuple will be the preferred solution.
+  /// </remarks>
+  [Serializable]
+  public sealed class <#= TupleName #><<#=types#>> : IEquatable<<#= TupleName #><<#=types#>>>, IEnumerable, ICloneable
+  {
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+    private readonly T<#=i#> item<#= i #>;
+<#}#>
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="<#= TupleName #>&lt;<#=types#>&gt;"/> class.
+    /// </summary>
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+    /// <param name="item<#=i#>">The <#= i #>th element.</param>
+<#}#>
+    public <#= TupleName #>(<#=arguments#>)
+    {
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+      this.item<#=i#> = item<#=i#>;
+<#}#>
+    }
+
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+    /// <summary>
+    /// Gets the <#=i#>th element of the tuple.
+    /// </summary>
+    /// <value>The <#=i#>th element of the tuple.</value>
+    public T<#=i#> Item<#=i#>
+    {
+      get { return item<#=i#>; }
+    }
+
+<#}#>
+
+    /// <summary>
+    /// Selects a value from this tuple using a function. Allows you to 
+    /// assign descriptive names to the tuple elements to increase
+    /// readability.
+    /// </summary>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
+    /// <param name="selector">The selector.</param>
+    /// <returns></returns>
+    public TResult Select<TResult>(Func<<#=types#>, TResult> selector)
+    {
+      selector.RequireNotNull("selector");
+
+      return selector(<#=GetPropertiesString(tupleSize)#>);
+    }
+
+    /// <summary>
+    /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+    /// </summary>
+    /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
+    /// <returns>
+    /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+    /// </returns>
+    /// <exception cref="T:System.NullReferenceException">
+    /// The <paramref name="obj"/> parameter is null.
+    /// </exception>
+    public override bool Equals(object obj)
+    {
+	  var other<#= TupleName #> = obj as <#= TupleName #><<#=types#>>;
+      return other<#= TupleName #> != null && Equals(other<#= TupleName #>);
+    }
+
+    /// <summary>
+    /// Indicates whether the current object is equal to another object of the same type.
+    /// </summary>
+    /// <param name="other">An object to compare with this object.</param>
+    /// <returns>
+    /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+    /// </returns>
+    public bool Equals(<#= TupleName #><<#=types#>> other)
+    {
+	  if (other == null) return false;
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+      if (!EqualityComparer<T<#=i#>>.Default.Equals(item<#=i#>, other.item<#=i#>))
+        return false;
+<#}#>
+
+      return true;
+    }
+
+    /// <summary>
+    /// Serves as a hash function for a particular type.
+    /// </summary>
+    /// <returns>
+    /// A hash code for the current <see cref="T:System.Object"/>.
+    /// </returns>
+    public override int GetHashCode()
+    {
+      int result = EqualityComparer<T1>.Default.GetHashCode(item1);
+      unchecked {
+<#for(int i = 2; i <= tupleSize; i++ ){#>
+        result = 397*result^EqualityComparer<T<#=i#>>.Default.GetHashCode(item<#=i#>);
+<#}#>
+      }
+      return result;
+    }
+
+    ///<summary>
+    /// Returns an enumerator that iterates through the tuple elements.
+    ///</summary>
+    ///<returns>
+    /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the tuple elements.
+    ///</returns>
+    public IEnumerator GetEnumerator()
+    {
+<#for(int i = 1; i <= tupleSize; i++ ){#>
+      yield return item<#=i#>;
+<#}#>
+    }
+
+    /// <summary>
+    /// Implements the operator ==.
+    /// </summary>
+    /// <param name="left">The left value.</param>
+    /// <param name="right">The right value.</param>
+    /// <returns>The result of the operator.</returns>
+    public static bool operator ==(<#= TupleName #><<#=types#>> left, <#= TupleName #><<#=types#>> right)
+    {
+      return Equals(left, right);
+    }
+
+    /// <summary>
+    /// Implements the operator !=.
+    /// </summary>
+    /// <param name="left">The left value.</param>
+    /// <param name="right">The right value.</param>
+    /// <returns>The result of the operator.</returns>
+    public static bool operator !=(<#= TupleName #><<#=types#>> left, <#= TupleName #><<#=types#>> right)
+    {
+      return !Equals(left, right);
+    }
+
+    /// <summary>
+    /// Returns a string representation of the tuple
+    /// </summary>
+    /// <returns>a string representation of the tuple</returns>
+    public override string ToString()
+    {
+      return string.Format("<<#=GetFormatString(tupleSize)#>>", <#=GetVariablesString(tupleSize)#>);
+    }
+
+    object ICloneable.Clone()
+    {
+      return Clone();
+    }
+
+    public <#= TupleName #><<#=types#>> Clone()
+    {
+      return <#= TupleName #>.Create(<#=GetVariablesString(tupleSize)#>);
+    }
+<# if (tupleSize <= 7) { #>
+
+    public static implicit operator System.Tuple<<#=types#>>(<#= TupleName #><<#=types#>> t)
+    {
+      return System.Tuple.Create(<#=GetQualifiedVarNames(tupleSize, "t")#>);
+    }
+
+    public static implicit operator <#= TupleName #><<#=types#>>(System.Tuple<<#=types#>> t)
+    {
+      return <#= TupleName #>.Create(<#=GetQualifiedSystemVarNames(tupleSize, "t")#>);
+    }
+<# } /* if */ #>
+  }
+
+<#}#>
+}
+<#+
+const string TupleName = "Tup";
+const int minTupleSize = 1; 
+const int maxTupleSize = 10; 
+const string Namespace = "ModelSoft.Framework";
+const string Indent = "  ";
+private string GetQualifiedVarNames(int tupleSize, string qualifier)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("{0}.item{1}", qualifier, i));
+}
+private string GetQualifiedSystemVarNames(int tupleSize, string qualifier)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("{0}.Item{1}", qualifier, i));
+}
+private string GetTypesString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("T{0}", i));
+}
+private string GetArgumentsString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("T{0} item{0}", i));
+}
+private string GetVariablesString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("item{0}", i));
+}
+private string GetPropertiesString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("Item{0}", i));
+}
+private string GetFormatString(int tupleSize)
+{
+  return ToStringList(Enumerable.Range(1, tupleSize), ", ", i => string.Format("{{{0}}}", i - 1));
+}
+#>
