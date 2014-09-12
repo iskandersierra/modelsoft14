@@ -110,80 +110,332 @@ namespace ModelSoft.Framework.Test
         [TestMethod]
         public void TypeExtensions_HasDirectAttributes()
         {
+
+            #region Assembly and String
             var thisAssembly = typeof (TypeExtensionsTest).Assembly;
-            var interfType = typeof(IInterfWithAttributes);
-            var classType1 = typeof(ClassWithInheritedAttributes);
 
-            Assert.IsTrue(thisAssembly.HasAttribute(typeof(AssemblyTitleAttribute)));
-            Assert.IsTrue(thisAssembly.HasAttribute(typeof(AssemblyTitleAttribute), false));
-            Assert.IsTrue(thisAssembly.HasAttribute(typeof(AssemblyTitleAttribute), true, true));
-            Assert.IsFalse(thisAssembly.HasAttribute(typeof(SerializableAttribute)));
-            Assert.IsFalse(thisAssembly.HasAttribute(typeof(SerializableAttribute), false));
-            Assert.IsFalse(thisAssembly.HasAttribute(typeof(SerializableAttribute), true, true));
+            Assert.IsTrue(thisAssembly.HasAttribute(typeof (AssemblyTitleAttribute)));
+            Assert.IsTrue(thisAssembly.HasAttribute(typeof (AssemblyTitleAttribute), false));
+            Assert.IsFalse(thisAssembly.HasAttribute(typeof (SerializableAttribute)));
+            Assert.IsFalse(thisAssembly.HasAttribute(typeof (SerializableAttribute), false));
 
-            Assert.IsTrue(interfType.HasAttribute(typeof(MultInhAttribute)));
-            Assert.IsTrue(interfType.HasAttribute<MultInhAttribute>());
-            Assert.IsTrue(interfType.HasAttribute(typeof(MultInhAttribute), false));
-            Assert.IsTrue(interfType.HasAttribute<MultInhAttribute>(false));
-            Assert.IsTrue(interfType.HasAttribute(typeof(MultInhAttribute), false, true));
-            Assert.IsTrue(interfType.HasAttribute<MultInhAttribute>(false, true));
-            Assert.IsTrue(interfType.HasAttribute(typeof(MultInhAttribute), true, true));
-            Assert.IsTrue(interfType.HasAttribute<MultInhAttribute>(true, true));
-            
-            Assert.IsTrue(interfType.HasAttributes(typeof(MultInhAttribute)));
-            Assert.IsTrue(interfType.HasAttributes<MultInhAttribute>());
-            Assert.IsTrue(interfType.HasAttributes(typeof(MultInhAttribute), false));
-            Assert.IsTrue(interfType.HasAttributes<MultInhAttribute>(false));
-            Assert.IsTrue(interfType.HasAttributes(typeof(MultInhAttribute), false, true));
-            Assert.IsTrue(interfType.HasAttributes<MultInhAttribute>(false, true));
-            Assert.IsTrue(interfType.HasAttributes(typeof(MultInhAttribute), true, true));
-            Assert.IsTrue(interfType.HasAttributes<MultInhAttribute>(true, true));
-            
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttribute(typeof(MultInhAttribute)));
+            Assert.IsFalse(CommonTypes.TypeOfString.HasAttribute(typeof (MultInhAttribute)));
             Assert.IsFalse(CommonTypes.TypeOfString.HasAttribute<MultInhAttribute>());
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttribute(typeof(MultInhAttribute), false));
+            Assert.IsFalse(CommonTypes.TypeOfString.HasAttribute(typeof (MultInhAttribute), false));
             Assert.IsFalse(CommonTypes.TypeOfString.HasAttribute<MultInhAttribute>(false));
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttribute(typeof(MultInhAttribute), false, true));
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttribute<MultInhAttribute>(false, true));
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttribute(typeof(MultInhAttribute), true, true));
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttribute<MultInhAttribute>(true, true));
-            
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttributes(typeof(MultInhAttribute)));
+
+            Assert.IsFalse(CommonTypes.TypeOfString.HasAttributes(typeof (MultInhAttribute)));
             Assert.IsFalse(CommonTypes.TypeOfString.HasAttributes<MultInhAttribute>());
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttributes(typeof(MultInhAttribute), false));
+            Assert.IsFalse(CommonTypes.TypeOfString.HasAttributes(typeof (MultInhAttribute), false));
             Assert.IsFalse(CommonTypes.TypeOfString.HasAttributes<MultInhAttribute>(false));
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttributes(typeof(MultInhAttribute), false, true));
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttributes<MultInhAttribute>(false, true));
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttributes(typeof(MultInhAttribute), true, true));
-            Assert.IsFalse(CommonTypes.TypeOfString.HasAttributes<MultInhAttribute>(true, true));
+
+            #endregion
+
+            #region Interface
+            var interfType = typeof(IInterfWithAttributes);
+
+            Assert.IsTrue(interfType.HasAttribute(typeof (MultInhAttribute)));
+            Assert.IsTrue(interfType.HasAttribute<MultInhAttribute>());
+            Assert.IsTrue(interfType.HasAttribute(typeof (MultInhAttribute), false));
+            Assert.IsTrue(interfType.HasAttribute<MultInhAttribute>(false));
+
+            Assert.IsTrue(interfType.HasAttributes(typeof (MultInhAttribute)));
+            Assert.IsTrue(interfType.HasAttributes<MultInhAttribute>());
+            Assert.IsTrue(interfType.HasAttributes(typeof (MultInhAttribute), false));
+            Assert.IsTrue(interfType.HasAttributes<MultInhAttribute>(false));
 
             var allattrs = interfType.GetAttributes(false);
-            Assert.IsNotNull(allattrs, "GetAttributes");
-            Assert.AreEqual(4, allattrs.Length);
-            Assert.IsTrue(allattrs.All(a => a != null));
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("1"),
+                new MultNoInhAttribute("2"),
+                new MultNoInhAttribute("2a"),
+                new NoMultInhAttribute("3"),
+                new MultInhAttribute("4"),
+            });
+
+            #endregion
+
+            #region Class
+            var classType1 = typeof(ClassWithInheritedAttributes);
+
+            Assert.IsFalse(classType1.HasAttribute<NoMultNoInhAttribute>());
+            Assert.IsFalse(classType1.HasAttribute<NoMultNoInhAttribute>(false));
+            Assert.IsFalse(classType1.HasAttribute<MultNoInhAttribute>());
+            Assert.IsFalse(classType1.HasAttribute<MultNoInhAttribute>(false));
+            Assert.IsTrue(classType1.HasAttribute<NoMultInhAttribute>());
+            Assert.IsFalse(classType1.HasAttribute<NoMultInhAttribute>(false));
+            Assert.IsFalse(classType1.HasAttribute<MultInhAttribute>());
+            Assert.IsTrue(classType1.HasAttribute<MultInhAttribute>(false));
+
+            Assert.IsFalse(classType1.HasAttributes<NoMultNoInhAttribute>());
+            Assert.IsFalse(classType1.HasAttributes<NoMultNoInhAttribute>(false));
+            Assert.IsFalse(classType1.HasAttributes<MultNoInhAttribute>());
+            Assert.IsFalse(classType1.HasAttributes<MultNoInhAttribute>(false));
+            Assert.IsTrue(classType1.HasAttributes<NoMultInhAttribute>());
+            Assert.IsFalse(classType1.HasAttributes<NoMultInhAttribute>(false));
+            Assert.IsTrue(classType1.HasAttributes<MultInhAttribute>());
+            Assert.IsTrue(classType1.HasAttributes<MultInhAttribute>(false));
+
+            allattrs = classType1.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("5"),
+            });
+
+            allattrs = classType1.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("4"),
+                new MultInhAttribute("5"),
+                new NoMultInhAttribute("23"),
+                new MultInhAttribute("24"),
+            });
+
+            #endregion
+
+            #region Members, Parameters and Returns
+
+            #region Field
+
+            var classField = classType1.GetField("Field");
+            allattrs = classField.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("^"),
+            });
+            allattrs = classField.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("^"),
+            });
+
+            #endregion
+
+            #region Property
+
+            var interfProperty = interfType.GetProperty("Property");
+            allattrs = interfProperty.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("A"), new MultNoInhAttribute("B"), new MultNoInhAttribute("B1"), new NoMultInhAttribute("C"), new MultInhAttribute("D"),
+            });
+            allattrs = interfProperty.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("A"), new MultNoInhAttribute("B"), new MultNoInhAttribute("B1"), new NoMultInhAttribute("C"), new MultInhAttribute("D"),
+            });
+
+            var classProperty = classType1.GetProperty("Property");
+            allattrs = classProperty.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("$"),
+            });
+            allattrs = classProperty.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("$"),
+                new NoMultInhAttribute("2C"), new MultInhAttribute("2D"), 
+                new MultInhAttribute("D"),
+            });
+
+            #endregion
+
+            #region Event
+
+            var interfEvent = interfType.GetEvent("Event");
+            allattrs = interfEvent.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("R"), new MultNoInhAttribute("S"), new MultNoInhAttribute("S1"), new NoMultInhAttribute("T"), new MultInhAttribute("U"), 
+            });
+            allattrs = interfEvent.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("R"), new MultNoInhAttribute("S"), new MultNoInhAttribute("S1"), new NoMultInhAttribute("T"), new MultInhAttribute("U"), 
+            });
+
+            var classEvent = classType1.GetEvent("Event");
+            allattrs = classEvent.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("%"),
+            });
+            allattrs = classEvent.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("%"),
+                new NoMultInhAttribute("2T"), new MultInhAttribute("2U"),
+                new MultInhAttribute("U"),
+            });
+
+            #endregion
+
+            #region Method
+
+            var interfMethod = interfType.GetMethod("Method");
+            allattrs = interfMethod.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("a"), new MultNoInhAttribute("b"), new MultNoInhAttribute("b1"), new NoMultInhAttribute("c"), new MultInhAttribute("d"), 
+            });
+            allattrs = interfMethod.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("a"), new MultNoInhAttribute("b"), new MultNoInhAttribute("b1"), new NoMultInhAttribute("c"), new MultInhAttribute("d"), 
+            });
+
+            var classMethod = classType1.GetMethod("Method");
+            allattrs = classMethod.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("!"),
+            });
+            allattrs = classMethod.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("!"),
+                new NoMultInhAttribute("2c"), new MultInhAttribute("2d"), 
+                new MultInhAttribute("d"), 
+            });
+
+            #endregion
+
+            #region Method parameter
+
+            var interfMethodParam = interfMethod.GetParameters()[0];
+            allattrs = interfMethodParam.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("p"), new MultNoInhAttribute("q"), new MultNoInhAttribute("q1"), new NoMultInhAttribute("r"), new MultInhAttribute("s"), 
+            });
+            allattrs = interfMethodParam.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("p"), new MultNoInhAttribute("q"), new MultNoInhAttribute("q1"), new NoMultInhAttribute("r"), new MultInhAttribute("s"), 
+            });
+
+            var classMethodParam = classMethod.GetParameters()[0];
+            allattrs = classMethodParam.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("#"),
+            });
+            allattrs = classMethodParam.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("#"),
+                new NoMultInhAttribute("2r"), new MultInhAttribute("2s"), 
+                new MultInhAttribute("s"), 
+            });
+
+            #endregion
+
+            #region Method return parameter
+
+            var interfMethodReturn = interfMethod.ReturnParameter;
+            allattrs = interfMethodReturn.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("i"), new MultNoInhAttribute("j"), new MultNoInhAttribute("j1"), new NoMultInhAttribute("k"), new MultInhAttribute("l"), 
+            });
+            allattrs = interfMethodReturn.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new NoMultNoInhAttribute("i"), new MultNoInhAttribute("j"), new MultNoInhAttribute("j1"), new NoMultInhAttribute("k"), new MultInhAttribute("l"), 
+            });
+
+            var classMethodReturn = classMethod.ReturnParameter;
+            allattrs = classMethodReturn.GetAttributes(false);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("@"),
+            });
+            allattrs = classMethodReturn.GetAttributes(true);
+            CheckAllAttributes(allattrs, new Attribute[]
+            {
+                new MultInhAttribute("@"),
+                new NoMultInhAttribute("2k"), new MultInhAttribute("2l"), 
+                new MultInhAttribute("l"), 
+            });
+
+            #endregion
+
+            #endregion
+        }
+
+        private void CheckAllAttributes(Attribute[] attributes, Attribute[] expected)
+        {
+            Assert.IsNotNull(attributes);
+            Assert.IsTrue(attributes.All(a => a != null));
+            attributes = attributes.OfType<TestAttrBase>().ToArray();
+            Assert.AreEqual(expected.Length, attributes.Length);
+            Assert.IsTrue(expected.OrderBy(e => e).SameSequenceAs(attributes.OrderBy(e => e)),
+                string.Format("Sequance do not match. Expected = [{0}] and actual = [{1}]", expected.ToStringList(), attributes.ToStringList()));
         }
 
         #region [ Test types to apply test attributes ]
 
-        [NoMultNoInh("1")]
-        [MultNoInh("2")]
-        [NoMultInh("3")]
-        [MultInh("4")]
+        [NoMultNoInh("1"), MultNoInh("2"), MultNoInh("2a"), NoMultInh("3"), MultInh("4")]
         public interface IInterfWithAttributes
         {
+            [NoMultNoInh("A"), MultNoInh("B"), MultNoInh("B1"), NoMultInh("C"), MultInh("D")]
+            string Property { get; set; }
+
+            [NoMultNoInh("a"), MultNoInh("b"), MultNoInh("b1"), NoMultInh("c"), MultInh("d")]
+            [return: NoMultNoInh("i"), MultNoInh("j"), MultNoInh("j1"), NoMultInh("k"), MultInh("l")]
+            string Method(
+                [NoMultNoInh("p"), MultNoInh("q"), MultNoInh("q1"), NoMultInh("r"), MultInh("s")] double distance,
+                [NoMultNoInh("P"), MultNoInh("Q"), MultNoInh("Q1"), NoMultInh("R"), MultInh("S")] float speed);
+
+            [NoMultNoInh("R"), MultNoInh("S"), MultNoInh("S1"), NoMultInh("T"), MultInh("U")]
+            event EventHandler Event;
 
         }
 
-        public class ClassWithInheritedAttributes : IInterfWithAttributes
+        [NoMultNoInh("21"), MultNoInh("22"), MultNoInh("22a"), NoMultInh("23"), MultInh("24")]
+        public interface IInterfWithAttributes2
         {
-            
+            [NoMultNoInh("2A"), MultNoInh("2B"), MultNoInh("2B1"), NoMultInh("2C"), MultInh("2D")]
+            string Property { get; set; }
+
+            [NoMultNoInh("2a"), MultNoInh("2b"), MultNoInh("2b1"), NoMultInh("2c"), MultInh("2d")]
+            [return: NoMultNoInh("2i"), MultNoInh("2j"), MultNoInh("2j1"), NoMultInh("2k"), MultInh("2l")]
+            string Method(
+                [NoMultNoInh("2p"), MultNoInh("2q"), MultNoInh("2q1"), NoMultInh("2r"), MultInh("2s")] double distance,
+                [NoMultNoInh("2P"), MultNoInh("2Q"), MultNoInh("2Q1"), NoMultInh("2R"), MultInh("2S")] float speed);
+
+            [NoMultNoInh("2R"), MultNoInh("2S"), MultNoInh("2S1"), NoMultInh("2T"), MultInh("2U")]
+            event EventHandler Event;
+
+        }
+
+        [MultInh("5")]
+        [ImplementsInterface(typeof(IInterfWithAttributes2), typeof(IInterfWithAttributes))]
+        public class ClassWithInheritedAttributes : IInterfWithAttributes, IInterfWithAttributes2
+        {
+            [MultInh("$")]
+            public string Property { get; set; }
+            [MultInh("!")]
+            [return: MultInh("@")]
+            public string Method([MultInh("#")] double distance, [MultInh("&")] float speed)
+            {
+                throw new NotImplementedException();
+            }
+
+            [MultInh("%")]
+            public event EventHandler Event;
+
+            [MultInh("^")]
+            public string Field;
         }
 
         #endregion
 
         #region [ Test attributes ]
         [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
-        public abstract class TestAttrBase : Attribute
+        public abstract class TestAttrBase : Attribute, IComparable<TestAttrBase>, IComparable
         {
             protected TestAttrBase(string name)
             {
@@ -191,6 +443,46 @@ namespace ModelSoft.Framework.Test
             }
 
             public string Name { get; set; }
+
+            protected bool Equals(TestAttrBase other)
+            {
+                return base.Equals(other) && string.Equals(Name, other.Name);
+            }
+
+            public int CompareTo(TestAttrBase other)
+            {
+                int comp;
+                comp = String.Compare(Name, other.Name, StringComparison.Ordinal);
+                if (comp != 0) return comp;
+                comp = String.Compare(GetType().FullName, other.GetType().FullName, StringComparison.Ordinal);
+                return comp;
+            }
+
+            public int CompareTo(object obj)
+            {
+                return CompareTo((TestAttrBase)obj);
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((TestAttrBase) obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (base.GetHashCode()*397) ^ (Name != null ? Name.GetHashCode() : 0);
+                }
+            }
+
+            public override string ToString()
+            {
+                return string.Format("{1}: {0}", Name, GetType().Name);
+            }
         }
 
         [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = true)]
