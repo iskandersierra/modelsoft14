@@ -135,4 +135,43 @@
   <data name="ModelElement_ContainerModel_DisplayName" xml:space="preserve">
     <value>Container model</value>
   </data>
+  <data name="CoreCategory" xml:space="preserve">
+    <value>Core</value>
+  </data>
+  <data name="ModelElement_Description" xml:space="preserve">
+    <value>Base modeling element for all modeling classes</value>
+  </data>
+  <data name="IdCategory" xml:space="preserve">
+    <value>Identifiers</value>
+  </data>
+  <data name="WithIdentifier_Description" xml:space="preserve">
+    <value>Element having a unique local and global identifier in the form of a Unique Resource Identifier</value>
+  </data>
+  <data name="WithIdentifier_DisplayName" xml:space="preserve">
+    <value>Element with unique identifier</value>
+  </data>
+  <data name="WithIdentifier_Identifier_DisplayName" xml:space="preserve">
+    <value>Unique identifier</value>
+  </data>
+  <data name="IdentifierSpace_DisplayName" xml:space="preserve">
+    <value>Unique identifier space</value>
+  </data>
+  <data name="IdentifierSpace_Elements_DisplayName" xml:space="preserve">
+    <value>Elements</value>
+  </data>
+  <data name="WithIdentifier_GlobalIdentifier_DisplayName" xml:space="preserve">
+    <value>Absolute identifier</value>
+  </data>
+  <data name="WithIdentifier_IdentifierSpace_DisplayName" xml:space="preserve">
+    <value>Unique identifier space</value>
+  </data>
+  <data name="Model_DisplayName" xml:space="preserve">
+    <value>Model</value>
+  </data>
+  <data name="Model_Elements_DisplayName" xml:space="preserve">
+    <value>Model elements</value>
+  </data>
+  <data name="CollectionIsReadonly" xml:space="preserve">
+    <value>Collection is readonly</value>
+  </data>
 </root>

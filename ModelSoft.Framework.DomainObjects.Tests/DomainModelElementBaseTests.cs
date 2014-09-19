@@ -2,7 +2,6 @@
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ModelSoft.Core;
 using ModelSoft.Framework.Serialization;
 
 namespace ModelSoft.Framework.DomainObjects

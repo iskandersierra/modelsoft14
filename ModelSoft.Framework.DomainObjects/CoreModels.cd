@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="ModelSoft.Framework.DomainObjects.IModelElement">
+    <Position X="4.75" Y="1.25" Width="1.5" />
+    <AssociationLine Name="Container" Type="ModelSoft.Framework.DomainObjects.IModelElement" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.188" Y="1.25" />
+        <Point X="5.188" Y="1" />
+        <Point X="5.75" Y="1" />
+        <Point X="5.75" Y="1.25" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.867" Y="0.084" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="ContainerModel" Type="ModelSoft.Framework.DomainObjects.IModel">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.081" Y="0.149" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IModelElement.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Container" />
+      <Property Name="ContainerModel" />
+    </ShowAsAssociation>
+  </Interface>
+  <Interface Name="ModelSoft.Framework.DomainObjects.IModel">
+    <Position X="4.75" Y="3.75" Width="1.5" />
+    <AssociationLine Name="Elements" Type="ModelSoft.Framework.DomainObjects.IModelElement">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.932" Y="0.102" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Elements" />
+    </ShowAsCollectionAssociation>
+  </Interface>
+  <Interface Name="ModelSoft.Framework.DomainObjects.IUriSpace">
+    <Position X="8.25" Y="3.75" Width="1.5" />
+    <AssociationLine Name="Elements" Type="ModelSoft.Framework.DomainObjects.IWithUri">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.05" Y="0.328" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IUriSpace.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Elements" />
+    </ShowAsCollectionAssociation>
+  </Interface>
+  <Interface Name="ModelSoft.Framework.DomainObjects.IWithUri">
+    <Position X="8.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAACAAAAAAEAAA=</HashCode>
+      <FileName>IWithUri.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="UriSpace" />
+    </ShowAsAssociation>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

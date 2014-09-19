@@ -143,6 +143,62 @@ namespace ModelSoft.Framework
 
         #endregion
 
+        #region [ CopyToEx ]
+        public static void CopyToEx(this IEnumerable e, object[] array, int arrayIndex)
+        {
+            e.TakeEx(array.Length - arrayIndex).ForEachEx(t => array[arrayIndex++] = t);
+        }
+        public static void CopyToEx(this IEnumerable e, Array array, int arrayIndex)
+        {
+            e.TakeEx(array.Length - arrayIndex).ForEachEx(t => array.SetValue(t, arrayIndex++));
+        }
+        #endregion
+
+        #region [ Do/ForEach ]
+
+        [DebuggerStepThrough]
+        public static IEnumerable DoEx(this IEnumerable e, Action<object> action)
+        {
+            action.RequireNotNull("action");
+
+            if (e == null) yield break;
+            foreach (var t in e)
+            {
+                action(t);
+                yield return t;
+            }
+        }
+        [DebuggerStepThrough]
+        public static IEnumerable DoEx(this IEnumerable e, Action<object, int> action)
+        {
+            action.RequireNotNull("action");
+
+            if (e == null) yield break;
+            int pos = 0;
+            foreach (var t in e)
+            {
+                action(t, pos);
+                yield return t;
+                pos++;
+            }
+        }
+        [DebuggerStepThrough]
+        public static IEnumerable ForEachEx(this IEnumerable e, Action<object> action)
+        {
+            if (e == null) return null;
+            foreach (var t in e.DoEx(action)) { }
+            return e;
+        }
+        [DebuggerStepThrough]
+        public static IEnumerable ForEachEx(this IEnumerable e, Action<object, int> action)
+        {
+            if (e == null) return null;
+            foreach (var t in e.DoEx(action)) { }
+            return e;
+        }
+
+        #endregion
+
         #region [ OfTypeEx/Exact ]
         public static IEnumerable OfTypeEx(this IEnumerable enumerable, Type type)
         {
@@ -160,6 +216,31 @@ namespace ModelSoft.Framework
         }
         #endregion
 
+        #region [ TakeEx/SkipEx ]
+        public static IEnumerable SkipIterator(this IEnumerable source, int count)
+        {
+            var enumerator = source.GetEnumerator();
+            while (count > 0 && enumerator.MoveNext())
+                --count;
+            if (count <= 0)
+                while (enumerator.MoveNext())
+                    yield return enumerator.Current;
+        }
+
+        public static IEnumerable TakeEx(this IEnumerable e, int count)
+        {
+            if (count > 0)
+            {
+                foreach (object source1 in e)
+                {
+                    yield return source1;
+                    if (--count == 0)
+                        break;
+                }
+            }
+        }
+        #endregion [ TakeEx/SkipEx ]
+
         #region [ WhereEx ]
         public static IEnumerable WhereEx(this IEnumerable source, Func<object, bool> predicate)
         {
@@ -171,6 +252,7 @@ namespace ModelSoft.Framework
                     yield return item;
         }
         #endregion
+
         #endregion
 
         #region [ OfType/Exact ]
@@ -1676,7 +1758,7 @@ namespace ModelSoft.Framework
 
         #endregion
 
-        #region [ Iterating ]
+        #region [ Do/ForEach ]
 
         [DebuggerStepThrough]
         public static IEnumerable<T> Do<T>(this IEnumerable<T> e, Action<T> action)

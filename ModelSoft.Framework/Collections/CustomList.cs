@@ -225,6 +225,11 @@ namespace ModelSoft.Framework.Collections
             AfterRemoveInternal(item, index);
         }
 
+        void IList<T>.RemoveAt(int index)
+        {
+            RemoveAt(index);
+        }
+
         public T this[int index]
         {
             get

@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace ModelSoft.Framework.DomainObjects
 {
-    public interface IModel : IModelElement, IWithUri
+    [LocalizedDisplayName("Model_DisplayName")]
+    [LocalizedCategory("CoreCategory")]
+    [ImplementsInterface(typeof(IIdentifierSpace))]
+    public interface IModel : IIdentifierSpace
     {
-        IList<IModelElement> ModelElements { get; }
+        [Content]
+        [LocalizedDisplayName("Model_Elements_DisplayName")]
+        [LocalizedCategory("CoreCategory")]
+        new IList<IModelElement> Elements { get; }
     }
 }

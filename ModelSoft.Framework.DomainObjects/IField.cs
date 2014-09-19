@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModelSoft.Framework.DomainObjects
 {
-    public interface IWithUri : IModelElement
+    public interface IField
     {
-        Uri Uri { get; set; }
-
-        Uri AbsoluteUri { get; }
     }
 }

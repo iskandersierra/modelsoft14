@@ -17,7 +17,7 @@ namespace ModelSoft.Framework.Collections
 
         void MakeReadOnly();
 
-        IEnumerator<TValue> GetEnumerator();
+        new IEnumerator<TValue> GetEnumerator();
     }
 
     public class IndexedList<TKey, TValue> : 

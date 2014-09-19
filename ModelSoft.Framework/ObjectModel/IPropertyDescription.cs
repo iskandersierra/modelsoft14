@@ -44,7 +44,7 @@ namespace ModelSoft.Framework.ObjectModel
 
     new T GetValue(object instance);
 
-    new void SetValue(object instance, T value);
+    void SetValue(object instance, T value);
 
     new T DefaultValue { get; }
   }

@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.Practices.ServiceLocation;
-using ModelSoft.Core;
 using ModelSoft.Framework.DomainObjects;
 using ModelSoft.Framework.Logging;
 using ModelSoft.Framework.NLogAddapter;
@@ -38,17 +37,7 @@ namespace TestConsoleApp
 
         private static void TestModelElementBase()
         {
-            //var package = new Package();
-            //var classes = ModelElementBase.GetRegisteredClasses().ToList();
 
-            //foreach (var aClass in classes)
-            //{
-            //    Console.WriteLine(aClass);
-            //    foreach (var property in aClass.Properties)
-            //    {
-            //        Console.WriteLine("    {0}", property);
-            //    }
-            //}
         }
 
         private static void TestLogAttributes()
