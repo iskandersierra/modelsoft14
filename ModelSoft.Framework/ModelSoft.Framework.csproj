@@ -143,7 +143,9 @@
     </Compile>
     <Compile Include="GeneralExtensions.cs" />
     <Compile Include="GenericMonitor.cs" />
+    <Compile Include="IIndentedFormatted.cs" />
     <Compile Include="ImplementsInterfaceAttribute.cs" />
+    <Compile Include="Reflection\IClassSearchService.cs" />
     <Compile Include="LocalizationAttributesExtensions.cs" />
     <Compile Include="LocalizedResourceManagerAttribute.cs" />
     <Compile Include="LocalizedStringAttribute.cs" />
@@ -155,6 +157,8 @@
     <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Logging\LogManager.cs" />
     <Compile Include="Logging\NullLogChannelProvider.cs" />
+    <Compile Include="RegexCache.cs" />
+    <Compile Include="ResourceManagersCache.cs" />
     <Compile Include="Serialization\MSCoreLibStringSerializer.cs" />
     <Compile Include="Serialization\SerializationExtensions.cs" />
     <Compile Include="ServiceHost.cs" />

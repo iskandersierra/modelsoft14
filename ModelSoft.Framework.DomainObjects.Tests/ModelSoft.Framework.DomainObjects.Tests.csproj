@@ -77,10 +77,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ModelSoft.Framework.DomainObjects\ModelSoft.Framework.DomainObjects.csproj">
-      <Project>{81FF5FB7-6953-4A28-892B-4245AEA98D23}</Project>
-      <Name>ModelSoft.Framework.DomainObjects</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ModelSoft.Framework\ModelSoft.Framework.csproj">
       <Project>{BB78CCCA-1A77-48D2-BA93-35E0414FA450}</Project>
       <Name>ModelSoft.Framework</Name>

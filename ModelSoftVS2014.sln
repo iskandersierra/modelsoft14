@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelSoft.Framework", "ModelSoft.Framework\ModelSoft.Framework.csproj", "{BB78CCCA-1A77-48D2-BA93-35E0414FA450}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelSoft.Framework.Tests", "ModelSoft.Framework.Tests\ModelSoft.Framework.Tests.csproj", "{5B2D4595-2B3B-46ED-91ED-30A6F1167542}"
@@ -9,15 +11,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Snippets", "Snippets", "{1B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsoleApp", "TestConsoleApp\TestConsoleApp.csproj", "{28CC7A24-6D4D-411A-A93D-F437686479E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelSoft.Framework.DomainObjects", "ModelSoft.Framework.DomainObjects\ModelSoft.Framework.DomainObjects.csproj", "{81FF5FB7-6953-4A28-892B-4245AEA98D23}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelSoft.Framework.DomainObjects.Tests", "ModelSoft.Framework.DomainObjects.Tests\ModelSoft.Framework.DomainObjects.Tests.csproj", "{33967889-ED7F-4F8A-ACC8-E373D3182DD9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelSoft.Framework.Aspects", "ModelSoft.Framework.Aspects\ModelSoft.Framework.Aspects.csproj", "{EB5BEFD0-AE2F-446A-AF3F-EB61449B0F4B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelSoft.Framework.NLogAddapter", "ModelSoft.Framework.NLogAddapter\ModelSoft.Framework.NLogAddapter.csproj", "{3C57A76A-A522-41B7-AD08-C1F4AF87AA81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelSoft.Modeling.CoreModels", "ModelSoft.Modeling.CoreModels\ModelSoft.Modeling.CoreModels.csproj", "{0A2DC581-5BE5-4E99-9AA3-FC2BC7AA297B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelSoft.SharpModels", "ModelSoft.SharpModels\ModelSoft.SharpModels.csproj", "{ADA2AC2F-B2C1-483B-B251-0B56C69AC43A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModelSoft.SharpModels.Tests", "ModelSoft.SharpModels.Tests\ModelSoft.SharpModels.Tests.csproj", "{25CD17DB-FC65-43B4-8D34-34026699FACF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +39,6 @@ Global
 		{28CC7A24-6D4D-411A-A93D-F437686479E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28CC7A24-6D4D-411A-A93D-F437686479E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28CC7A24-6D4D-411A-A93D-F437686479E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{81FF5FB7-6953-4A28-892B-4245AEA98D23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{81FF5FB7-6953-4A28-892B-4245AEA98D23}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81FF5FB7-6953-4A28-892B-4245AEA98D23}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{81FF5FB7-6953-4A28-892B-4245AEA98D23}.Release|Any CPU.Build.0 = Release|Any CPU
-		{33967889-ED7F-4F8A-ACC8-E373D3182DD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33967889-ED7F-4F8A-ACC8-E373D3182DD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33967889-ED7F-4F8A-ACC8-E373D3182DD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33967889-ED7F-4F8A-ACC8-E373D3182DD9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB5BEFD0-AE2F-446A-AF3F-EB61449B0F4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB5BEFD0-AE2F-446A-AF3F-EB61449B0F4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB5BEFD0-AE2F-446A-AF3F-EB61449B0F4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +51,14 @@ Global
 		{0A2DC581-5BE5-4E99-9AA3-FC2BC7AA297B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A2DC581-5BE5-4E99-9AA3-FC2BC7AA297B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A2DC581-5BE5-4E99-9AA3-FC2BC7AA297B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADA2AC2F-B2C1-483B-B251-0B56C69AC43A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADA2AC2F-B2C1-483B-B251-0B56C69AC43A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADA2AC2F-B2C1-483B-B251-0B56C69AC43A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADA2AC2F-B2C1-483B-B251-0B56C69AC43A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25CD17DB-FC65-43B4-8D34-34026699FACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25CD17DB-FC65-43B4-8D34-34026699FACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25CD17DB-FC65-43B4-8D34-34026699FACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25CD17DB-FC65-43B4-8D34-34026699FACF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

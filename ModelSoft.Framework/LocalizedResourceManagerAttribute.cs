@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Reflection;
 using System.Resources;
 using ModelSoft.Framework.Annotations;
@@ -13,8 +12,6 @@ namespace ModelSoft.Framework
         private readonly Type _resourceSource;
         private readonly string _baseName;
         private readonly Type _typeOnAssembly;
-
-        private static readonly ConcurrentDictionary<LocalizedResourceManagerAttribute, ResourceManager> Managers = new ConcurrentDictionary<LocalizedResourceManagerAttribute, ResourceManager>();
 
         public LocalizedResourceManagerAttribute([NotNull] Type resourceSource)
         {
@@ -58,48 +55,15 @@ namespace ModelSoft.Framework
 
         public ResourceManager GetResourceManager()
         {
-            return Managers.GetOrAdd(this, key => key.CreateResourceManager());
-        }
-
-        private ResourceManager CreateResourceManager()
-        {
             if (BaseName != null)
             {
                 if (ResourceSource != null)
-                    return new ResourceManager(BaseName, Assembly, ResourceSource);
-                return new ResourceManager(BaseName, Assembly);
+                    return ResourceManagersCache.Current.GetResourceManager(BaseName, Assembly, ResourceSource);
+                return ResourceManagersCache.Current.GetResourceManager(BaseName, Assembly);
             }
             if (ResourceSource != null)
-                return new ResourceManager(ResourceSource);
+                return ResourceManagersCache.Current.GetResourceManager(ResourceSource);
             return null;
-        }
-
-        public bool Equals(LocalizedResourceManagerAttribute other)
-        {
-            return other != null && 
-                   ResourceSource == other.ResourceSource && 
-                   string.Equals(BaseName, other.BaseName) && 
-                   Assembly == other.Assembly;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((LocalizedResourceManagerAttribute) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = base.GetHashCode();
-                hashCode = (hashCode*397) ^ (ResourceSource != null ? ResourceSource.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (BaseName != null ? BaseName.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ (Assembly != null ? Assembly.GetHashCode() : 0);
-                return hashCode;
-            }
         }
 
         public override string ToString()
@@ -107,12 +71,12 @@ namespace ModelSoft.Framework
             if (BaseName != null)
             {
                 if (ResourceSource != null)
-                    return string.Format(@"new ResourceManager(""{0}"", ""{1}"", ""{2}"")", BaseName, Assembly, ResourceSource);
-                return string.Format(@"new ResourceManager(""{0}"", ""{1}"")", BaseName, Assembly);
+                    return string.Format(@"ResourceManager(""{0}"", ""{1}"", ""{2}"")", BaseName, Assembly, ResourceSource);
+                return string.Format(@"ResourceManager(""{0}"", ""{1}"")", BaseName, Assembly);
             }
             if (ResourceSource != null)
-                return string.Format(@"new ResourceManager(""{0}"")", BaseName);
-            return string.Format(@"new ResourceManager()");
+                return string.Format(@"ResourceManager(""{0}"")", BaseName);
+            return string.Format(@"ResourceManager()");
         }
     }
 }

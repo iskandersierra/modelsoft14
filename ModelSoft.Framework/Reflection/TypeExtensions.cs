@@ -324,6 +324,29 @@ namespace ModelSoft.Framework.Reflection
             return propertyAccessor.GetPropertyInfo().Name;
         }
 
+        /// <summary>
+        /// Expects an expression of type: p => p.Property
+        /// Similar to GetPropertyInfo but checks wether the member is the parameter of the expression and not other expression, like in p => p.Foo.Bar or p => int.MaxValue.ToString().Length
+        /// </summary>
+        /// <typeparam name="TObject"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="propertyAccessor"></param>
+        /// <returns></returns>
+        public static PropertyInfo GetParameterPropertyInfo<TObject, TValue>(this Expression<Func<TObject, TValue>> propertyAccessor)
+        {
+            propertyAccessor.RequireNotNull("propertyAccessor");
+
+            var member = propertyAccessor.Body as MemberExpression;
+            (member != null).RequireCondition("propertyAccessor", @"Expression body must be a MemberExpression");
+
+            var propertyInfo = member.Member as PropertyInfo;
+            (propertyInfo != null).RequireCondition("propertyAccessor", @"Member accessor must be a Property");
+
+            (member.Expression == propertyAccessor.Parameters[0]).RequireCondition("propertyAccessor", @"Member accessor must be of the form p => p." + propertyInfo.Name);
+
+            return propertyInfo;
+        }
+
         #endregion
 
         #region [ GetMethodInfo / GetMethodName ]
@@ -1008,6 +1031,15 @@ namespace ModelSoft.Framework.Reflection
 
         #region [ GetGenericArgs ]
 
+        /// <summary>
+        /// Finds a match for a given type and a given generic type definition.
+        /// For example: typeof(List&lt;string>).GetGenericArgsFor(typeof(IEnumerable&lt;>)) returns [string]
+        /// For example: typeof(Dictionary&lt;string, int>).GetGenericArgsFor(typeof(IDictionary&lt;,>)) returns [string, int]
+        /// </summary>
+        /// <param name="genericType"></param>
+        /// <param name="genericDefinition"></param>
+        /// <param name="nullOnError"></param>
+        /// <returns></returns>
         public static Type[] GetGenericArgsFor(this Type genericType, Type genericDefinition, bool nullOnError = false)
         {
             if (genericType == null) throw new ArgumentNullException("genericType");

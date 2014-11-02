@@ -61,11 +61,47 @@ namespace ModelSoft.Framework.DomainObjects.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ambiguous matches found for value {0} of enum {1}: {2}.
+        /// </summary>
+        public static string AmbiguousMatchesFoundForGivenValue {
+            get {
+                return ResourceManager.GetString("AmbiguousMatchesFoundForGivenValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot convert {0} to type {1}.
+        /// </summary>
+        public static string CannotConvertInstanceToType {
+            get {
+                return ResourceManager.GetString("CannotConvertInstanceToType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot convert to {0}.
+        /// </summary>
+        public static string CannotConvertToType {
+            get {
+                return ResourceManager.GetString("CannotConvertToType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot create model class for type {0}.
         /// </summary>
         public static string CannotCreateModelClass {
             get {
                 return ResourceManager.GetString("CannotCreateModelClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find flags or group members in a non-flag enum {0} for instance {1}.
+        /// </summary>
+        public static string CannotFindFlagsForNonFlagEnum {
+            get {
+                return ResourceManager.GetString("CannotFindFlagsForNonFlagEnum", resourceCulture);
             }
         }
         
@@ -84,6 +120,42 @@ namespace ModelSoft.Framework.DomainObjects.Properties {
         public static string CoreCategory {
             get {
                 return ResourceManager.GetString("CoreCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Misc.
+        /// </summary>
+        public static string DefaultCategory {
+            get {
+                return ResourceManager.GetString("DefaultCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate base classes are not allowed for class {0}: {1}.
+        /// </summary>
+        public static string DuplicateBaseClassesAreNotAllowed {
+            get {
+                return ResourceManager.GetString("DuplicateBaseClassesAreNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate property names are not allowed on class {0}: {1}.
+        /// </summary>
+        public static string DuplicatePropertyNamesAreNotAllowed {
+            get {
+                return ResourceManager.GetString("DuplicatePropertyNamesAreNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enum {0} cannot contain non-member literals: {1}.
+        /// </summary>
+        public static string EnumCannotContainNonMemberLiterals {
+            get {
+                return ResourceManager.GetString("EnumCannotContainNonMemberLiterals", resourceCulture);
             }
         }
         
@@ -111,6 +183,24 @@ namespace ModelSoft.Framework.DomainObjects.Properties {
         public static string IdentifierSpace_Elements_DisplayName {
             get {
                 return ResourceManager.GetString("IdentifierSpace_Elements_DisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid base classes for class {0}: {1}.
+        /// </summary>
+        public static string InvalidBaseClasses {
+            get {
+                return ResourceManager.GetString("InvalidBaseClasses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid class global identifier: {0}.
+        /// </summary>
+        public static string InvalidClassGlobalIdentifierFormat {
+            get {
+                return ResourceManager.GetString("InvalidClassGlobalIdentifierFormat", resourceCulture);
             }
         }
         
@@ -169,6 +259,24 @@ namespace ModelSoft.Framework.DomainObjects.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No literal found matching {0} for enum {1}.
+        /// </summary>
+        public static string NoLiteralFoundMatchingGivenValue {
+            get {
+                return ResourceManager.GetString("NoLiteralFoundMatchingGivenValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-flag enum {0} do not support operations.
+        /// </summary>
+        public static string NonFlagEnumDoNotSupportOperations {
+            get {
+                return ResourceManager.GetString("NonFlagEnumDoNotSupportOperations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Property {0} has no computed value.
         /// </summary>
         public static string PropertyHasNoComputedValue {
@@ -183,6 +291,15 @@ namespace ModelSoft.Framework.DomainObjects.Properties {
         public static string PropertyHasNoDefaultValue {
             get {
                 return ResourceManager.GetString("PropertyHasNoDefaultValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type {0} is not a class.
+        /// </summary>
+        public static string TypeIsNotAClass {
+            get {
+                return ResourceManager.GetString("TypeIsNotAClass", resourceCulture);
             }
         }
         

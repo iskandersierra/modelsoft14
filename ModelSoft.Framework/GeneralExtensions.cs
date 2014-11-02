@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -14,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ModelSoft.Framework.Collections;
 using ModelSoft.Framework.Properties;
+using ModelSoft.Framework.Reflection;
 
 namespace ModelSoft.Framework
 {
@@ -1275,6 +1278,242 @@ namespace ModelSoft.Framework
             return uri;
         }
 
+        #endregion
+
+        #region [ SaveAsCSV ]
+
+        public const char DefaultCSVSeparator = ';';
+        public const char DefaultCSVOpenQuote = '"';
+        public const char DefaultCSVCloseQuote = '"';
+        public const char DefaultCSVEscape = '\\';
+
+        public static void SaveAsCSV(this IEnumerable list,
+            string csvFile,
+            char separator = DefaultCSVSeparator,
+            char openQuote = DefaultCSVOpenQuote,
+            char closeQuote = DefaultCSVCloseQuote,
+            char escape = DefaultCSVEscape,
+            bool addQuotesAnyway = false)
+        {
+            if (list == null) throw new ArgumentNullException("list");
+            if (csvFile == null) throw new ArgumentNullException("csvFile");
+
+            using (var writer = new StreamWriter(csvFile))
+            {
+                SaveAsCSV(list, writer, separator, openQuote, closeQuote, escape, addQuotesAnyway);
+            }
+        }
+        public static void SaveAsCSV(this IEnumerable list,
+            string csvFile, Encoding encoding,
+            char separator = DefaultCSVSeparator,
+            char openQuote = DefaultCSVOpenQuote,
+            char closeQuote = DefaultCSVCloseQuote,
+            char escape = DefaultCSVEscape,
+            bool addQuotesAnyway = false)
+        {
+            if (list == null) throw new ArgumentNullException("list");
+            if (csvFile == null) throw new ArgumentNullException("csvFile");
+
+            using (var writer = new StreamWriter(csvFile, false, encoding))
+            {
+                SaveAsCSV(list, writer, separator, openQuote, closeQuote, escape, addQuotesAnyway);
+            }
+        }
+
+        public static void SaveAsCSV(this IEnumerable list,
+            Stream csvFile,
+            char separator = DefaultCSVSeparator,
+            char openQuote = DefaultCSVOpenQuote,
+            char closeQuote = DefaultCSVCloseQuote,
+            char escape = DefaultCSVEscape,
+            bool addQuotesAnyway = false)
+        {
+            if (list == null) throw new ArgumentNullException("list");
+            if (csvFile == null) throw new ArgumentNullException("csvFile");
+
+            using (var writer = new StreamWriter(csvFile))
+            {
+                SaveAsCSV(list, writer, separator, openQuote, closeQuote, escape, addQuotesAnyway);
+            }
+        }
+        public static void SaveAsCSV(this IEnumerable list, 
+            Stream csvFile, Encoding encoding,
+            char separator = DefaultCSVSeparator,
+            char openQuote = DefaultCSVOpenQuote,
+            char closeQuote = DefaultCSVCloseQuote,
+            char escape = DefaultCSVEscape,
+            bool addQuotesAnyway = false)
+        {
+            if (list == null) throw new ArgumentNullException("list");
+            if (csvFile == null) throw new ArgumentNullException("csvFile");
+
+            using (var writer = new StreamWriter(csvFile, encoding))
+            {
+                SaveAsCSV(list, writer, separator, openQuote, closeQuote, escape, addQuotesAnyway);
+            }
+        }
+
+        public static void SaveAsCSV(this IEnumerable list, 
+            TextWriter csvFile, 
+            char separator = DefaultCSVSeparator, 
+            char openQuote = DefaultCSVOpenQuote,
+            char closeQuote = DefaultCSVCloseQuote,
+            char escape = DefaultCSVEscape,
+            bool addQuotesAnyway = false)
+        {
+            if (list == null) throw new ArgumentNullException("list");
+            if (csvFile == null) throw new ArgumentNullException("csvFile");
+
+            var culture = CultureInfo.InvariantCulture;
+
+            PropertyInfo[] properties = null;
+            string format = null;
+            Type baseType = null;
+            bool singleType = true;
+            bool isEmpty = true;
+            bool isCompilerGenerated;
+            
+            // Find most abstract common type of items
+            foreach (var item in list)
+            {
+                if (item == null) continue;
+                isEmpty = false;
+                if (baseType == null)
+                    baseType = item.GetType();
+                else
+                {
+                    var type = item.GetType();
+                    if (baseType != type)
+                    {
+                        singleType = false;
+                        if (type.IsAssignableFrom(baseType))
+                            baseType = type;
+                        else if (!baseType.IsAssignableFrom(type))
+                        {
+                            type = type.BaseType;
+                            while (!type.IsAssignableFrom(baseType))
+                                type = type.BaseType;
+                            baseType = type;
+                        }
+                    }
+                }
+            }
+
+
+            // If list is empty get type from list type
+            if (baseType == null) // list is empty
+            {
+                var types = list.GetType().GetGenericArgsFor(typeof (IEnumerable<>), true);
+                if (types == null)
+                    baseType = CommonTypes.TypeOfString;
+                else
+                    baseType = types[0];
+            }
+
+            isCompilerGenerated = baseType.HasAttribute<CompilerGeneratedAttribute>();
+
+            if (!isEmpty)
+            {
+                properties = baseType.GetProperties(BindingFlags.Instance | BindingFlags.Public).Where(p => p.CanRead).ToArray();
+                format = string.Join(separator.ToString(), Enumerable.Range(0, properties.Length).Select(i => "{" + i + "}"));
+            }
+
+            //Write headers
+            if (!isEmpty)
+            {
+                if (!singleType)
+                    csvFile.Write("{0}{1}", "ClrType".ToCSVValue(separator, openQuote, closeQuote, escape, addQuotesAnyway), separator);
+                if (!isCompilerGenerated)
+                    csvFile.Write("{0}{1}", "Item".ToCSVValue(separator, openQuote, closeQuote, escape, addQuotesAnyway), separator);
+                var propertyNames = properties.Select(p => p.Name.ToCSVValue(separator, openQuote, closeQuote, escape, addQuotesAnyway)).ToArray<object>();
+                csvFile.WriteLine(format, propertyNames);
+            }
+            else
+            {
+                csvFile.WriteLine("{0}{1}", "Empty".ToCSVValue(separator, openQuote, closeQuote, escape, addQuotesAnyway), separator);
+            }
+
+            //Write items
+            foreach (var item in list)
+            {
+                if (item == null)
+                {
+                    if (!singleType)
+                        csvFile.WriteLine("{0}{1}", "Empty".ToCSVValue(separator, openQuote, closeQuote, escape, addQuotesAnyway), separator);
+                    continue;
+                }
+                if (!singleType)
+                    csvFile.Write("{0}{1}", item.GetType().Name.ToCSVValue(separator, openQuote, closeQuote, escape, addQuotesAnyway), separator);
+                if (!isCompilerGenerated)
+                {
+                    csvFile.Write("{0}{1}",
+                        (item is IFormattable ? ((IFormattable) item).ToString(null, culture) : item.ToString())
+                            .ToCSVValue(separator, openQuote, closeQuote, escape, addQuotesAnyway), separator);
+                }
+                if (!isEmpty)
+                {
+                    var values = properties
+                        .Select(p => p.GetValue(item, null))
+                        .Select(e => e.ToCSVValue(culture, separator, openQuote, closeQuote, escape, addQuotesAnyway))
+                        .ToArray<object>();
+                    csvFile.WriteLine(format, values);
+                }
+            }
+        }
+
+        public static string ToCSVValue(this object obj,
+            IFormatProvider formatProvider = null,
+            char separator = DefaultCSVSeparator,
+            char openQuote = DefaultCSVOpenQuote,
+            char closeQuote = DefaultCSVCloseQuote,
+            char escape = DefaultCSVEscape,
+            bool addQuotesAnyway = false)
+        {
+            if (obj == null) return string.Empty;
+            var formattable = obj as IFormattable;
+            var text = formattable != null ? formattable.ToString(null, formatProvider) : obj.ToString();
+            var result = text.ToCSVValue(separator, openQuote, closeQuote, escape, addQuotesAnyway);
+            return result;
+        }
+        public static string ToCSVValue(this string text,
+            char separator = DefaultCSVSeparator,
+            char openQuote = DefaultCSVOpenQuote,
+            char closeQuote = DefaultCSVCloseQuote,
+            char escape = DefaultCSVEscape,
+            bool addQuotesAnyway = false
+        )
+        {
+            if (text == null) return addQuotesAnyway ? @"""""" : String.Empty;
+
+            var addquotes = addQuotesAnyway;
+            if (!addquotes)
+            {
+                var specialCharPattern = string.Format(@"({0}|{1}|{2}|{3})",
+                    separator.EscapeForRegex(),
+                    openQuote.EscapeForRegex(),
+                    closeQuote.EscapeForRegex(),
+                    escape.EscapeForRegex());
+                var specialRegex = RegexCache.Current.GetRegex(specialCharPattern,
+                    RegexOptions.Singleline | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+
+                addquotes = specialRegex.IsMatch(text);
+            }
+
+
+            if (addquotes)
+            {
+                var quoteCharPattern = string.Format(@"(?<char>({0}|{1}|{2}))",
+                    escape.EscapeForRegex(),
+                    openQuote.EscapeForRegex(),
+                    closeQuote.EscapeForRegex());
+                var quoteRegex = RegexCache.Current.GetRegex(quoteCharPattern,
+                    RegexOptions.Singleline | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+                var escapedText = quoteRegex.Replace(text, escape + @"${char}");
+                var result = string.Format("{1}{0}{2}", escapedText, openQuote, closeQuote);
+                return result;
+            }
+            return text;
+        }
         #endregion
 
     }

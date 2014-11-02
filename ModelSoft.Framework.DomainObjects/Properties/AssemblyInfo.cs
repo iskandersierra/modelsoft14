@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 using ModelSoft.Framework;
+using ModelSoft.Framework.DomainObjects;
 using ModelSoft.Framework.DomainObjects.Properties;
 
 [assembly: AssemblyTitle("ModelSoft.Framework.DomainObjects")]
@@ -37,3 +38,4 @@ using ModelSoft.Framework.DomainObjects.Properties;
 [assembly: AssemblyVersion("0.1.*")]
 
 [assembly: LocalizedResourceManager(typeof(Resources)) ]
+[assembly: AssemblyBaseName("http://models.imodelsoft.com/system/core/")]

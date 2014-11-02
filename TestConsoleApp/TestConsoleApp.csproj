@@ -97,10 +97,6 @@
       <Project>{eb5befd0-ae2f-446a-af3f-eb61449b0f4b}</Project>
       <Name>ModelSoft.Framework.Aspects</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ModelSoft.Framework.DomainObjects\ModelSoft.Framework.DomainObjects.csproj">
-      <Project>{81ff5fb7-6953-4a28-892b-4245aea98d23}</Project>
-      <Name>ModelSoft.Framework.DomainObjects</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ModelSoft.Framework.NLogAddapter\ModelSoft.Framework.NLogAddapter.csproj">
       <Project>{3c57a76a-a522-41b7-ad08-c1f4af87aa81}</Project>
       <Name>ModelSoft.Framework.NLogAddapter</Name>

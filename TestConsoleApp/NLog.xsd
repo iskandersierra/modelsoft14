@@ -1684,7 +1684,7 @@
         </xs:attribute>
         <xs:attribute name="className" type="xs:string">
           <xs:annotation>
-            <xs:documentation>Class name.</xs:documentation>
+            <xs:documentation>ClrClassType name.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="methodName" type="xs:string">

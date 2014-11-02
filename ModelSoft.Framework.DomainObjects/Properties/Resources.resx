@@ -174,4 +174,43 @@
   <data name="CollectionIsReadonly" xml:space="preserve">
     <value>Collection is readonly</value>
   </data>
+  <data name="DefaultCategory" xml:space="preserve">
+    <value>Misc</value>
+  </data>
+  <data name="InvalidClassGlobalIdentifierFormat" xml:space="preserve">
+    <value>Invalid class global identifier: {0}</value>
+  </data>
+  <data name="TypeIsNotAClass" xml:space="preserve">
+    <value>Type {0} is not a class</value>
+  </data>
+  <data name="DuplicateBaseClassesAreNotAllowed" xml:space="preserve">
+    <value>Duplicate base classes are not allowed for class {0}: {1}</value>
+  </data>
+  <data name="InvalidBaseClasses" xml:space="preserve">
+    <value>Invalid base classes for class {0}: {1}</value>
+  </data>
+  <data name="DuplicatePropertyNamesAreNotAllowed" xml:space="preserve">
+    <value>Duplicate property names are not allowed on class {0}: {1}</value>
+  </data>
+  <data name="CannotConvertToType" xml:space="preserve">
+    <value>Cannot convert to {0}</value>
+  </data>
+  <data name="EnumCannotContainNonMemberLiterals" xml:space="preserve">
+    <value>Enum {0} cannot contain non-member literals: {1}</value>
+  </data>
+  <data name="CannotFindFlagsForNonFlagEnum" xml:space="preserve">
+    <value>Cannot find flags or group members in a non-flag enum {0} for instance {1}</value>
+  </data>
+  <data name="CannotConvertInstanceToType" xml:space="preserve">
+    <value>Cannot convert {0} to type {1}</value>
+  </data>
+  <data name="NoLiteralFoundMatchingGivenValue" xml:space="preserve">
+    <value>No literal found matching {0} for enum {1}</value>
+  </data>
+  <data name="AmbiguousMatchesFoundForGivenValue" xml:space="preserve">
+    <value>Ambiguous matches found for value {0} of enum {1}: {2}</value>
+  </data>
+  <data name="NonFlagEnumDoNotSupportOperations" xml:space="preserve">
+    <value>Non-flag enum {0} do not support operations</value>
+  </data>
 </root>

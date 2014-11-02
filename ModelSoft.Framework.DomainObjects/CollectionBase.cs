@@ -10,7 +10,7 @@ namespace ModelSoft.Framework.DomainObjects
         ICollection<TValue>, 
         ICollection
     {
-        public CollectionBase()
+        protected CollectionBase()
         {
             IsReadOnly = false;
         }

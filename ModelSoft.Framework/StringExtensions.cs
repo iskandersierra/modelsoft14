@@ -18,9 +18,17 @@ namespace ModelSoft.Framework
         {
             return string.IsNullOrEmpty(str);
         }
+        public static bool IsNotEmpty(this string str)
+        {
+            return !string.IsNullOrEmpty(str);
+        }
         public static bool IsWS(this string str)
         {
             return string.IsNullOrWhiteSpace(str);
+        }
+        public static bool IsNotWS(this string str)
+        {
+            return !string.IsNullOrWhiteSpace(str);
         }
         public static string IfWS(this string str, string defaultValue)
         {
@@ -629,11 +637,22 @@ namespace ModelSoft.Framework
         #endregion
 
         #region [ IsValidCSharpIdentifier ]
-        public static readonly Regex CSharpIdentifierRegex = new Regex(@"^[\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}_][\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}]*$", RegexOptions.Singleline | RegexOptions.Compiled);
+        // http://msdn.microsoft.com/en-us/library/aa664670(v=vs.71).aspx
+        public const string CSharpLetterCharPattern = @"\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}";
+        public const string CSharpCombiningCharPattern = @"\p{Mn}\p{Mc}";
+        public const string CSharpDecimalDigitCharPattern = @"\p{Nd}";
+        public const string CSharpConnectingCharPattern = @"\p{Pc}";
+        public const string CSharpFormattingCharPattern = @"\p{Cf}";
+        public const string CSharpIdentifierStartCharPattern = "[" + CSharpLetterCharPattern + "_" + "]";
+        public const string CSharpIdentifierPartCharPattern = "[" + CSharpLetterCharPattern + CSharpDecimalDigitCharPattern + CSharpConnectingCharPattern + CSharpCombiningCharPattern + CSharpFormattingCharPattern + "]";
+        public const string PartCSharpIdentifierPattern = CSharpIdentifierStartCharPattern + CSharpIdentifierPartCharPattern + @"*";
+
+        public static readonly Regex PartCSharpIdentifierRegex = new Regex(PartCSharpIdentifierPattern, RegexOptions.Compiled);
+        public static readonly Regex AloneCSharpIdentifierRegex = new Regex("^" + PartCSharpIdentifierPattern + "$", RegexOptions.Compiled);
 
         public static bool IsValidCSharpIdentifier(this string text)
         {
-            return text != null && CSharpIdentifierRegex.IsMatch(text);
+            return text != null && AloneCSharpIdentifierRegex.IsMatch(text);
         }
         public static bool ValidateCSharpIdentifier(this string text, bool throwOnError = true)
         {
@@ -646,6 +665,24 @@ namespace ModelSoft.Framework
             return true;
         }
         #endregion
+
+        #region [ Regex ]
+
+        public const string RegexSpecialChars = @".$^{[(|)*+?\";
+        public const string RegexSpecialCharsPattern = @"[\.\$\^\{\[\(\|\)\*\+\?\\]";
+        public static readonly Regex RegexSpecialCharsRegex = new Regex(@"(?<special>" + RegexSpecialCharsPattern + @")", RegexOptions.Singleline | RegexOptions.ExplicitCapture | RegexOptions.Compiled);
+
+        public static string EscapeForRegex(this char ch)
+        {
+            return ch.ToString().EscapeForRegex();
+        }
+        public static string EscapeForRegex(this string text)
+        {
+            if (text == null) return null;
+            var result = RegexSpecialCharsRegex.Replace(text, @"\${special}");
+            return result;
+        }
+        #endregion [ Regex ]
 
     }
 }
