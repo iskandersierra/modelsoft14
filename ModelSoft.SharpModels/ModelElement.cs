@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security;
 using ModelSoft.Framework.Reflection;
 
 namespace ModelSoft.SharpModels
 {
-    public enum ModelPropertyType { Property, Container, Content, Reference }
-    public enum ModelPropertyMultiplicity { Single, Collection, OrderedCollection }
-
     public abstract class ModelElement :
         IModelElement
     {
-        internal ModelElement()
-        {
-        }
 
         #region [ IModelElement ]
 
+        private readonly ITypeInformation _typeInformation;
         private IModelElement _containerElement;
+        private IModelProperty _containerProperty;
 
         IModelElement IModelElement.ContainerElement
         {
@@ -51,6 +50,310 @@ namespace ModelSoft.SharpModels
             }
         }
 
+        public ITypeInformation TypeInformation { get { return _typeInformation; } }
+
+        #endregion
+
+        #region [ TypeInformation ]
+
+        public static IModelElement Create(string url, bool throwIfNull = true)
+        {
+            IModelElement instance;
+            if (TryCreate(url, out instance))
+                return instance;
+            if (throwIfNull)
+                throw new ArgumentException(string.Format("Url {0} is invalid as a model class", url));
+            return null;
+        }
+
+        public static IModelElement Create(Type modelType, bool throwIfNull = true)
+        {
+            IModelElement instance;
+            if (TryCreate(modelType, out instance))
+                return instance;
+            if (throwIfNull)
+                throw new ArgumentException(string.Format("Type {0} is invalid as a model class", modelType.FullName));
+            return null;
+        }
+        public static TModelElement Create<TModelElement>(bool throwIfNull = true)
+            where TModelElement : class, IModelElement
+        {
+            var instance = Create(typeof (TModelElement), throwIfNull);
+            return (TModelElement) instance;
+        }
+
+        public static bool TryCreate(string url, out IModelElement instance)
+        {
+            ITypeInformation typeInformation;
+            if (TryGetTypeInformation(url, out typeInformation))
+            {
+                instance = CreateInternal(typeInformation);
+                return true;
+            }
+            instance = null;
+            return false;
+        }
+        public static bool TryCreate(Type modelType, out IModelElement instance)
+        {
+            ITypeInformation typeInformation;
+            if (TryGetTypeInformation(modelType, out typeInformation))
+            {
+                instance = CreateInternal(typeInformation);
+                return true;
+            }
+            instance = null;
+            return false;
+        }
+
+        public static bool TryCreate<TModelElement>(out TModelElement instance)
+            where TModelElement : class, IModelElement
+        {
+            IModelElement result;
+            if (TryCreate(typeof (TModelElement), out result))
+            {
+                instance = result as TModelElement;
+                return instance != null;
+            }
+            instance = null;
+            return false;
+        }
+
+        private static IModelElement CreateInternal(ITypeInformation type)
+        {
+            var instance = type.CreateInstance();
+            return instance;
+        }
+
+        public static ITypeInformation GetTypeInformation(Type type)
+        {
+            ITypeInformation result;
+            if (TryGetTypeInformation(type, out result))
+                return result;
+            throw new ArgumentException(string.Format("Type {0} is invalid as a model class", type.FullName));
+        }
+        public static ITypeInformation GetTypeInformation(string url)
+        {
+            ITypeInformation result;
+            if (TryGetTypeInformation(url, out result))
+                return result;
+            throw new ArgumentException(string.Format("Url {0} is invalid as a model class", url));
+        }
+        public static ITypeInformation GetTypeInformation<TModelElement>()
+            where TModelElement : IModelElement
+        {
+            return GetTypeInformation(typeof(TModelElement));
+        }
+
+        public static bool TryGetTypeInformation(Type type, out ITypeInformation typeInformation)
+        {
+            if (type == null) throw new ArgumentNullException("type");
+            TypeInformationImpl impl;
+            if (TryGetTypeInformationInternal(type, out impl))
+            {
+                typeInformation = impl;
+                return true;
+            }
+            typeInformation = null;
+            return false;
+        }
+        public static bool TryGetTypeInformation(string url, out ITypeInformation typeInformation)
+        {
+            if (url == null) throw new ArgumentNullException("url");
+            TypeInformationImpl impl;
+            if (TryGetTypeInformationInternal(url, out impl))
+            {
+                typeInformation = impl;
+                return true;
+            }
+            typeInformation = null;
+            return false;
+        }
+
+        public static bool TryGetTypeInformation<TModelElement>(out ITypeInformation typeInformation)
+            where TModelElement : IModelElement
+        {
+            var result = TryGetTypeInformation(typeof (TModelElement), out typeInformation);
+            return result;
+        }
+
+        private static Dictionary<string, TypeInformationImpl> _typesRegistryByUrl = new Dictionary<string,TypeInformationImpl>(StringComparer.OrdinalIgnoreCase);
+        private static Dictionary<Type, TypeInformationImpl> _typesRegistry = new Dictionary<Type, TypeInformationImpl>();
+
+        private static bool TryGetTypeInformationInternal(string url, out TypeInformationImpl typeInformation)
+        {
+            lock (_registryLock)
+            {
+                if (_typesRegistryByUrl.TryGetValue(url, out typeInformation))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        private static bool TryGetTypeInformationInternal(Type type, out TypeInformationImpl typeInformation)
+        {
+            lock (_registryLock)
+            {
+                if (!_typesRegistry.TryGetValue(type, out typeInformation))
+                {
+                    if (!TryCreateTypeInformationInternal(type, out typeInformation))
+                        return false;
+
+                    if (_typesRegistryByUrl.ContainsKey(typeInformation.Url))
+                        return false;
+
+                    _typesRegistry.Add(typeInformation.Interface, typeInformation);
+                    _typesRegistry.Add(typeInformation.ClassType, typeInformation);
+                    _typesRegistryByUrl.Add(typeInformation.Url, typeInformation);
+                }
+            }
+
+            return true;
+        }
+
+        private static bool TryCreateTypeInformationInternal(Type type, out TypeInformationImpl typeInformation)
+        {
+            Type classType;
+            Type interfaceType;
+            if (type.IsClass)
+            {
+                interfaceType = ImplementsAttribute.ElementImplements(type);
+                if (interfaceType != null)
+                {
+                    classType = ImplementedByAttribute.ElementIsImplementedBy(interfaceType);
+                    if (classType == type)
+                    {
+                        if (TryCreateTypeInformationInternal(classType, interfaceType, out typeInformation))
+                            return true;
+                    }
+                }
+            }
+            else if (type.IsInterface)
+            {
+                classType = ImplementedByAttribute.ElementIsImplementedBy(type);
+                if (classType != null)
+                {
+                    interfaceType = ImplementsAttribute.ElementImplements(classType);
+                    if (interfaceType == type)
+                    {
+                        if (TryCreateTypeInformationInternal(classType, interfaceType, out typeInformation))
+                            return true;
+                    }
+                }
+            }
+
+            typeInformation = null;
+            return false;
+        }
+
+        private static bool TryCreateTypeInformationInternal(Type classType, Type interfaceType,
+            out TypeInformationImpl typeInformation)
+        {
+            var url = ModelElementUrlAttribute.GetElementUrl(interfaceType);
+            if (url != null)
+            {
+                var constructorInfo = classType.GetConstructor(Type.EmptyTypes);
+                if (constructorInfo != null)
+                {
+                    typeInformation = new TypeInformationImpl(classType, interfaceType, url, constructorInfo);
+                    return true;
+                }
+            }
+
+            typeInformation = null;
+            return false;
+        }
+
+        internal class TypeInformationImpl : ITypeInformation
+        {
+            private readonly Type _classType;
+            private readonly Type _interface;
+            private ConcurrentDictionary<string, ModelProperty> _propertiesByName = new ConcurrentDictionary<string, ModelProperty>();
+            private string _url;
+            private Func<IModelElement> _constructor;
+
+            internal TypeInformationImpl(Type classType, Type interfaceType, string url, ConstructorInfo constructorInfo)
+            {
+                if (classType == null) throw new ArgumentNullException("classType");
+                _classType = classType;
+                _interface = interfaceType;
+                _url = url;
+                _constructor = Expression.Lambda<Func<IModelElement>>(
+                    body: Expression.New(constructorInfo)
+                    ).Compile();
+            }
+
+            public Func<IModelElement> Constructor
+            {
+                get { return _constructor; }
+            }
+
+            public Type Interface
+            {
+                get { return _interface; }
+            }
+
+            public bool IsInstance(IModelElement instance)
+            {
+                if (instance == null) return false;
+                var result = _interface.IsInstanceOfType(instance);
+                return result;
+            }
+
+            public IModelElement CreateInstance()
+            {
+                var instance = Constructor();
+                return instance;
+            }
+
+            public string Url
+            {
+                get { return _url; }
+            }
+
+            public IEnumerable<IModelProperty> Properties
+            {
+                get
+                {
+                    return _propertiesByName.Values.AsEnumerable();
+                }
+            }
+
+            public IModelProperty GetProperty(string propertyName, bool throwIfNotFound = true)
+            {
+                IModelProperty property;
+                if (TryGetProperty(propertyName, out property))
+                    return property;
+                if (throwIfNotFound)
+                    throw new ArgumentException(string.Format("Property {0} not found on type {1}", propertyName, this));
+                return null;
+            }
+
+            public bool TryGetProperty(string propertyName, out IModelProperty property)
+            {
+                if (propertyName == null) throw new ArgumentNullException("propertyName");
+                ModelProperty value;
+                if (_propertiesByName.TryGetValue(propertyName, out value))
+                {
+                    property = value;
+                    return true;
+                }
+                property = null;
+                return false;
+            }
+
+            public Type ClassType
+            {
+                get { return _classType; }
+            }
+
+            public ConcurrentDictionary<string, ModelProperty> PropertiesByName
+            {
+                get { return _propertiesByName; }
+            }
+        }
+
         #endregion
 
         #region [ RegisterProperty ]
@@ -59,7 +362,6 @@ namespace ModelSoft.SharpModels
         private static long _nextPropertyIdentifier = 1;
         private static ConcurrentDictionary<long, ModelProperty> _propertiesById = new ConcurrentDictionary<long, ModelProperty>();
         private static ConcurrentDictionary<PropertyInfo, ModelProperty> _propertiesByPropertyInfo = new ConcurrentDictionary<PropertyInfo, ModelProperty>();
-        private static ConcurrentDictionary<Type, TypeInformation> _typesRegistry = new ConcurrentDictionary<Type, TypeInformation>();
 
         protected internal static IModelProperty<TValue> RegisterProperty<TValue>(Func<IModelProperty<TValue>> propertyFunc)
         {
@@ -98,12 +400,13 @@ namespace ModelSoft.SharpModels
                         throw new InvalidOperationException(string.Format("Property {0} is already defined", property._property));
 
                     var declaringType = property._property.DeclaringType;
-                    var typeInfo = GetTypeInformationInternal(declaringType);
+                    var typeInfo = (TypeInformationImpl)GetTypeInformation(declaringType);
 
-                    if (typeInfo.PropertiesByName.ContainsKey(property.Name))
+                    if (typeInfo.GetProperty(property.Name, false) != null)
                         throw new InvalidOperationException(string.Format("Type {0} already define a property with name {1}", declaringType.FullName, property.Name));
 
                     property._identifier = _nextPropertyIdentifier++;
+                    property._typeInformation = typeInfo;
 
                     _propertiesById.TryAdd(property._identifier, property);
                     _propertiesByPropertyInfo.TryAdd(property._property, property);
@@ -114,35 +417,118 @@ namespace ModelSoft.SharpModels
             }
         }
 
-        private static TypeInformation GetTypeInformationInternal(Type type)
-        {
-            return _typesRegistry.GetOrAdd(type, CreateTypeInformationInternal);
-        }
-
-        private static TypeInformation CreateTypeInformationInternal(Type type)
-        {
-            return new TypeInformation(type);
-        }
-
         #endregion
 
         #region [ Get/SetValue ]
 
-        protected TValue GetValue<TValue>(IModelProperty<TValue> property)
+        //private object _fieldsLock = new object();
+        private IDictionary<ModelProperty, FieldValue> _fields;
+
+        protected object GetValue(IModelProperty property)
         {
-            throw new NotImplementedException();
+            var prop = CheckProperty(property, false);
+            FieldValue field;
+            if (_fields == null || !_fields.TryGetValue(prop, out field))
+                field = FieldValue.UnsetValue;
+
+            var result = ((ModelProperty)property).GetValue(this, field);
+
+            return result;
         }
 
-        protected void SetValue<TValue>(IModelProperty<TValue> firstNameProperty, TValue value)
+        protected TValue GetValue<TValue>(IModelProperty<TValue> property)
         {
-            throw new NotImplementedException();
+            var result = GetValue((IModelProperty)property);
+
+            return (TValue)result;
+        }
+
+        protected void SetValue<TValue>(IModelProperty<TValue> property, TValue value)
+        {
+            var prop = CheckProperty(property, true);
+            FieldValue field;
+            if (_fields == null)
+                _fields = new Dictionary<ModelProperty, FieldValue>();
+            if (!_fields.TryGetValue(prop, out field))
+            {
+                field = new FieldValue();
+                _fields.Add(prop, field);
+            }
+            prop.SetValue(this, field, value);
+        }
+
+        private ModelProperty CheckProperty(IModelProperty property, bool forWrite)
+        {
+            if (property == null) throw new ArgumentNullException("property");
+            var result = property as ModelProperty;
+            if (result == null) throw new NotSupportedException(string.Format("property {0} must be an instance of ModelProperty class", property));
+            if (result.TypeInformation.ClassType != this.GetType())
+                throw new NotSupportedException(string.Format("This object do not support given property {0}", property));
+            if (forWrite && result.IsReadOnly)
+                throw new NotSupportedException(string.Format("Cannot use read-only property {0} to modify element state", property));
+
+            return result;
+        }
+
+        #endregion
+
+        #region [ INotifyPropertyChanged/Changing ]
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangingEventHandler PropertyChanging;
+        public event EventHandler<ModelPropertyChangedEventArgs> ModelPropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (string.IsNullOrWhiteSpace(propertyName)) throw new ArgumentNullException("propertyName");
+            var property = this.TypeInformation.GetProperty(propertyName);
+            OnPropertyChanged(property);
+        }
+        protected void OnPropertyChanged(IModelProperty property)
+        {
+            if (property == null) throw new ArgumentNullException("property");
+            if (!property.DeclaringType.IsInstance(this)) throw new ArgumentException(string.Format("Property {0} not accepted for instance {1}", property, this));
+            var args = new PropertyChangedEventArgs(property.Name);
+            if (PropertyChanged != null)
+                PropertyChanged(this, args);
+            var modelArgs = new ModelPropertyChangedEventArgs(this, property, args);
+            OnModelPropertyChanged(modelArgs);
+            OnPropertyChangedOverride(property);
+        }
+        protected virtual void OnPropertyChangedOverride(IModelProperty property)
+        {
+
+        }
+
+        protected void OnPropertyChanging(PropertyChangingEventArgs args)
+        {
+            if (PropertyChanging != null)
+                PropertyChanging(this, args);
+        }
+        protected void OnPropertyChanging(string propertyName)
+        {
+            OnPropertyChanging(new PropertyChangingEventArgs(propertyName));
+        }
+        protected void OnPropertyChanging(IModelProperty property)
+        {
+            OnPropertyChanging(property.Name);
+        }
+
+        private void OnModelPropertyChanged(ModelPropertyChangedEventArgs args)
+        {
+            if (ModelPropertyChanged != null)
+                ModelPropertyChanged(this, args);
+
+            var parent = this.GetContainerElement() as ModelElement;
+            if (parent != null)
+                parent.OnModelPropertyChanged(args);
         }
 
         #endregion
 
         #region [ ModelProperty ]
 
-        internal class ModelProperty : IModelProperty
+        internal abstract class ModelProperty : IModelProperty
         {
             internal long _identifier;
             internal readonly PropertyInfo _property;
@@ -153,6 +539,7 @@ namespace ModelSoft.SharpModels
             internal IModelProperty _opposite;
             private readonly bool _isReadOnly;
             internal readonly IModelProperty _underlyingProperty;
+            internal TypeInformationImpl _typeInformation;
 
             internal ModelProperty(PropertyInfo property, ModelPropertyType modelPropertyType, ModelPropertyMultiplicity modelPropertyMultiplicity, Func<string> friendlyNameFunc, IModelProperty opposite)
             {
@@ -224,9 +611,27 @@ namespace ModelSoft.SharpModels
                 }
             }
 
+            public ITypeInformation DeclaringType
+            {
+                get
+                {
+                    return TypeInformation;
+                }
+            }
+
             public bool IsReadOnly
             {
                 get { return _isReadOnly; }
+            }
+
+            internal TypeInformationImpl TypeInformation
+            {
+                get
+                {
+                    return _underlyingProperty != null
+                        ? ((ModelProperty)_underlyingProperty)._typeInformation
+                        : _typeInformation;
+                }
             }
 
             protected bool Equals(ModelProperty other)
@@ -256,66 +661,49 @@ namespace ModelSoft.SharpModels
                         ? _underlyingProperty.ToString()
                         : string.Format("[{0}] {1}.{2}", _identifier, _property.DeclaringType.Name, Name);
             }
+
+            public object GetValue(ModelElement element, FieldValue field)
+            {
+                if (field.IsSet)
+                    return field.Value;
+                var result = GetDefaultValue((ModelElement)element, field);
+                return result;
+            }
+
+            public void SetValue(ModelElement element, FieldValue field, object value)
+            {
+                // compare values 
+                var oldValue = GetValue(element, field);
+                if (Equals(oldValue, value))
+                    return;
+
+                element.OnPropertyChanging(this);
+                field.Value = value;
+                field.IsSet = true;
+                element.OnPropertyChanged(this);
+            }
+
+            protected abstract object GetDefaultValue(ModelElement element, FieldValue field);
         }
         #endregion
 
-        #region [ TypeInformation ]
-        class TypeInformation
+        #region [ FieldValue ]
+
+        protected internal class FieldValue
         {
-            private readonly Type _type;
-            private readonly Type _interface;
-            private ConcurrentDictionary<string, ModelProperty> _propertiesByName = new ConcurrentDictionary<string, ModelProperty>();
-            private string _url;
-            private Func<object> _constructor;
+            internal static readonly FieldValue UnsetValue = new FieldValue();
 
-            public TypeInformation(Type type)
-            {
-                if (type == null) throw new ArgumentNullException("type");
-                _type = type;
-                _interface = ImplementsAttribute.ElementImplements(type);
-                if (_interface == null)
-                    throw new InvalidOperationException(string.Format("Type {0} do not implement a model interface", type.FullName));
-
-                _url = ModelElementUrlAttribute.GetElementUrl(_interface);
-                if (_url == null)
-                    throw new InvalidOperationException(string.Format("Type {0} has no url associated with it", type.FullName));
-
-                var constructorInfo = type.GetConstructor(Type.EmptyTypes);
-                if (constructorInfo == null)
-                    throw new InvalidOperationException(string.Format("Type {0} has no parameterless constructor therefore is non-instantiable", type.FullName));
-                _constructor = Expression.Lambda<Func<object>>(
-                    body: Expression.New(constructorInfo)
-                    ).Compile();
-            }
-
-            public Func<object> Constructor
-            {
-                get { return _constructor; }
-            }
-
-            public string Url
-            {
-                get { return _url; }
-            }
-
-            public Type Type
-            {
-                get { return _type; }
-            }
-
-            public ConcurrentDictionary<string, ModelProperty> PropertiesByName
-            {
-                get { return _propertiesByName; }
-            }
+            public object Value;
+            public bool IsSet;
         }
-        #endregion
+
+        #endregion [ FieldValue ]
     }
 
     public abstract class ModelElement<TElement> :
         ModelElement
         where TElement : ModelElement<TElement>
     {
-
         protected static ModelPropertyBuilder<TValue> RegisterProperty<TValue>(Expression<Func<TElement, TValue>> property)
         {
             if (property == null) throw new ArgumentNullException("property");
@@ -448,13 +836,14 @@ namespace ModelSoft.SharpModels
 
             return RegisterProperty(() => new ModelProperty<TValue>(property));
         }
-        
+
         #region [ ModelPropertyBuilder ]
 
         internal sealed class ModelProperty<TValue> : ModelProperty, IModelProperty<TValue>
         {
             private readonly Func<TValue> _defaultValueFunc;
             private readonly Func<TElement, TValue> _computeValueFunc;
+            private readonly Type TypeOfValue = typeof(TValue);
 
             internal ModelProperty(PropertyInfo property, ModelPropertyType modelPropertyType, ModelPropertyMultiplicity modelPropertyMultiplicity, Func<string> friendlyNameFunc, IModelProperty opposite, Func<TValue> defaultValueFunc, Func<TElement, TValue> computeValueFunc)
                 : base(property, modelPropertyType, modelPropertyMultiplicity, friendlyNameFunc, opposite)
@@ -463,7 +852,7 @@ namespace ModelSoft.SharpModels
                 _computeValueFunc = computeValueFunc;
             }
 
-            internal ModelProperty(IModelProperty<TValue> underlyingProperty) 
+            internal ModelProperty(IModelProperty<TValue> underlyingProperty)
                 : base(underlyingProperty)
             {
             }
@@ -476,6 +865,27 @@ namespace ModelSoft.SharpModels
             public Func<TElement, TValue> ComputeValueFunc
             {
                 get { return _computeValueFunc; }
+            }
+
+            protected override object GetDefaultValue(ModelElement element, FieldValue field)
+            {
+                object result;
+                if (DefaultValueFunc != null)
+                {
+                    result = DefaultValueFunc();
+                }
+                else if (ComputeValueFunc != null)
+                {
+                    result = ComputeValueFunc((TElement)element);
+                }
+                else
+                {
+                    if (TypeOfValue.IsClass)
+                        result = null;
+                    else
+                        result = Activator.CreateInstance<TValue>();
+                }
+                return result;
             }
         }
 

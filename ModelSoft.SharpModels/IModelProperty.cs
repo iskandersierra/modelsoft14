@@ -1,4 +1,7 @@
-﻿namespace ModelSoft.SharpModels
+﻿using System.Collections;
+using System.Security.Policy;
+
+namespace ModelSoft.SharpModels
 {
     public interface IModelProperty
     {
@@ -10,9 +13,10 @@
         bool IsReadOnly { get; }
 
         IModelProperty Opposite { get; }
+
+        ITypeInformation DeclaringType { get; }
     }
     public interface IModelProperty<T> : IModelProperty
     {
     }
-
 }

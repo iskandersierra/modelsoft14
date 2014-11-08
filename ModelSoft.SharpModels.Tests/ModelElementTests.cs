@@ -22,6 +22,13 @@ namespace ModelSoft.SharpModels.Tests
             CheckPropertyAsserts(SampleModel.FriendsProperty, "Friends", "Friends", ModelPropertyType.Reference, ModelPropertyMultiplicity.Collection, SampleModel.FriendsProperty, false);
             CheckPropertyAsserts(SampleModel.SocialMediaPropertyKey, "SocialMedia", "Social media", ModelPropertyType.Reference, ModelPropertyMultiplicity.Collection, null, false);
             CheckPropertyAsserts(SampleModel.SocialMediaProperty, "SocialMedia", "Social media", ModelPropertyType.Reference, ModelPropertyMultiplicity.Collection, null, true);
+
+            var typeInformation = ModelElement.GetTypeInformation(typeof(ISampleModel));
+            var typeInformation2 = ModelElement.GetTypeInformation<ISampleModel>();
+
+            Assert.IsNotNull(typeInformation);
+            Assert.IsNotNull(typeInformation2);
+            Assert.AreSame(typeInformation, typeInformation2);
         }
 
         private static void CheckPropertyAsserts(IModelProperty property, string propertyName, string friendlyName, ModelPropertyType type, ModelPropertyMultiplicity multiplicity, IModelProperty opposite, bool isReadOnly)
@@ -39,8 +46,12 @@ namespace ModelSoft.SharpModels.Tests
         [TestMethod]
         public void ModelElement_SampleModel_NewInstance()
         {
-            var model = new SampleModel();
+            var model = ModelElement.Create<ISampleModel>();
             Assert.IsNull(model.FirstName, "FirstName");
+
+            model.FirstName = "Foo";
+            Assert.AreEqual("Foo", model.FirstName, "FirstName");
+
         }
 
         public enum Sex { NotSet, Male, Female }

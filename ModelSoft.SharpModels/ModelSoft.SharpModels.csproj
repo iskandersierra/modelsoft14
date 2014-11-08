@@ -39,15 +39,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IModelFactory.cs" />
     <Compile Include="IModelProperty.cs" />
     <Compile Include="IModel.cs" />
     <Compile Include="IModelElement.cs" />
+    <Compile Include="IModelPropertyChanged.cs" />
     <Compile Include="ImplementedByAttribute.cs" />
     <Compile Include="IsAbstractAttribute.cs" />
+    <Compile Include="ITypeInformation.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="ModelElement.cs" />
     <Compile Include="ModelElementBaseUrlAttribute.cs" />
     <Compile Include="ModelElementUrlAttribute.cs" />
+    <Compile Include="ModelPropertyMultiplicity.cs" />
+    <Compile Include="ModelPropertyType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
